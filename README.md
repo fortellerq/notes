@@ -86,7 +86,8 @@ I have tried passthrough a Soundblaster XFi but for some reason that freezes the
 
 ## Windows XP
 
-Needs q35-2.10 to stop the VM from crashing.
+Needs q35-2.10 to stop the VM from crashing. Picking this will make XP 32 & 64 bit unable to shut down fully, and XP 32 bit shut down when trying to reboot.
+
 If installing XP 32 bit, we need to press F6 when the installer begins and install a AHCI driver. We'll need to attach `xp-satadrivers-ich9-flp.img` as a floppy for the installer to see it. To do this, upload the img to proxmox, and add this line to the vm's conf
 ```
 args: -fda /var/lib/vz/template/iso/xp-satadrivers-ich9-flp.img
@@ -107,7 +108,7 @@ If we run the VM with an emulated GPU such as by using the VMWare compatible dis
 
 ## Windows 98
 
-Can run with the latest i440 machine type, but according to [this Vogons post](https://www.vogons.org/viewtopic.php?t=94012), we can get SB16 emulation if we pick 2.11.
+Can run with the latest i440 machine type (9.0 at this time), but according to [this Vogons post](https://www.vogons.org/viewtopic.php?t=94012), we can get SB16 emulation if we pick 2.11. However picking 2.11 will make the machine unable to shut down fully.
 
 I have not been able to get GPU Passthrough to work for this.
 
