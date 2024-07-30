@@ -24,7 +24,7 @@ As for sound, for XP and up we can get by with the GPU's HDMI/DP Audio output. I
 
 ### Proxmox settings
 DO NOT follow any guide for GPU passthrough! Add all those boot flags and blacklisting the drivers gave me all sorts of issues.
-The only thing we need to do is enabling virtio modules (we may even not need to do this, I haven't tested)
+The only thing we need to do is enabling VT-D in the BIOS and virtio modules in Proxmox (we may even not need to do this, I haven't tested)
 ```
 nano /etc/modules
 ```
