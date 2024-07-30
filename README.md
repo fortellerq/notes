@@ -65,6 +65,8 @@ Copy the whole thing.
 Run this to somehow allow us to read the rom. I will not pretend that I understand what it does, but it works.
 ```
 setpci -s [device id] COMMAND=2:2 (manually manipulate the memory enable bit with setpci)
+# For example:
+# setpci -s 0000:24:00.0 COMMAND=2:2
 echo 1 > [paste the thing that we copied from above]
 cat [paste the thing] > /tmp/romfile
 echo 0 > [paste the thing]
