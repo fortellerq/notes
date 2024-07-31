@@ -30,7 +30,7 @@ For the rest of the components such as CPU, motherboard, it is not as important 
 
 As for sound, for XP and up we can get by with the GPU's HDMI/DP Audio output. I have not tried emulated sound hardware in Proxmox. 
 
-### Proxmox settings
+### Setting up Proxmox
 #### Modern machine 
 DO NOT modify the grub entry! Add all those boot flags and blacklisting the drivers gave me all sorts of issues.
 What worked for me is 
@@ -114,6 +114,7 @@ Go to the GPU device, the line should start with `pci`. Add this to the comma se
 
 The 3 backlashes are needed because for some reason, Proxmox tries to find the rom in the wrong location even if we put in the full path (in this case it is `/root/gpuroms/rtx3090.rom`), so we need to get back to the root for the path to work.
 
+### Soundcard passthrough
 I have tried passthrough a Soundblaster XFi but for some reason that freezes the entire physical machine. Not sure what's up with that.
 
 ## Windows XP
