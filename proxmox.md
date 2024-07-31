@@ -1,11 +1,19 @@
 # proxmox-notes
 This document holds all of my experience so far with Proxmox, with a focus on retro OSes. Windows 98, Windows XP, Windows Vista.
 
-- Proxmox version: 8.1
+Proxmox version: 8.1
+
+Machine 1 - **Modern machine**
 - CPU: i7 6700K
 - iGPU: Intel HD 530
 - GPU1: RTX 3090
 - GPU2: AMD R5 340X/R7 250
+  
+Machine 2 - **Time machine**
+- CPU: i7 3770
+- iGPU: Intel HD 4000 
+- GPU1: AMD HD 6450
+- GPU2: Geforce FX 5500
 
 ## Pre-requisites
 ### Hardware
@@ -23,6 +31,7 @@ For the rest of the components such as CPU, motherboard, it is not as important 
 As for sound, for XP and up we can get by with the GPU's HDMI/DP Audio output. I have not tried emulated sound hardware in Proxmox. 
 
 ### Proxmox settings
+#### Modern machine 
 DO NOT modify the grub entry! Add all those boot flags and blacklisting the drivers gave me all sorts of issues.
 What worked for me is 
 - Enabling VT-D in the BIOS
@@ -61,6 +70,10 @@ If we modify the grub entry like the guides say, it will prevent our GPUs from o
 
 Another thing we should do is setting up our BIOS so that the IGPU is used to boot the computer and run Proxmox. That way all of our discreet GPUs will be able to see the VM's boot sequence and we won't get the above issue.
 
+#### Time machine
+The above configuration even though allows GPU Passthrough to function on this machine, I could not get the GPU to output the boot sequence at all. I'm not sure why.
+
+### GPU vbios dumping
 We can dump the GPU's vbios rom to supposedly preserve this ability to see the VM's boot sequence in case it breaks for whatever reason, but I have not confirmed whether this works. 
 In all the different guides online, we'll only find these steps:
 ```
