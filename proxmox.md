@@ -1,7 +1,7 @@
 # proxmox-notes
 This document holds all of my experience so far with Proxmox, with a focus on retro OSes. Windows 98, Windows XP, Windows Vista.
 
-Proxmox version: 8.1
+Proxmox version: 8.2
 
 Machine 1 - **Modern machine**
 - CPU: i7 6700K
