@@ -107,7 +107,7 @@ I have tried passthrough a Soundblaster XFi but for some reason that freezes the
 
 Needs q35-2.10 to stop the VM from crashing. Picking this will make XP 32 & 64 bit unable to shut down fully, and XP 32 bit shut down when trying to reboot.
 
-If installing XP 32 bit, we need to press F6 when the installer begins and install a AHCI driver. We'll need to attach `xp-satadrivers-ich9-flp.img` as a floppy for the installer to see it. To do this, upload the img to proxmox, and add this line to the vm's conf
+If installing XP 32 bit, we need to press F6 when the installer begins and install a AHCI driver. We'll need to attach [xp-satadrivers-ich9-flp.img](disk-images/xp-satadrivers-ich9-flp.img) as a floppy for the installer to see it. To do this, upload the img to proxmox, and add this line to the vm's conf
 ```
 args: -fda /var/lib/vz/template/iso/xp-satadrivers-ich9-flp.img
 ```
