@@ -23,22 +23,41 @@ For the rest of the components such as CPU, motherboard, it is not as important 
 As for sound, for XP and up we can get by with the GPU's HDMI/DP Audio output. I have not tried emulated sound hardware in Proxmox. 
 
 ### Proxmox settings
-DO NOT follow any guide for GPU passthrough! Add all those boot flags and blacklisting the drivers gave me all sorts of issues.
-The only thing we need to do is enabling VT-D in the BIOS and virtio modules in Proxmox (we may even not need to do this, I haven't tested)
+DO NOT modify the grub entry! Add all those boot flags and blacklisting the drivers gave me all sorts of issues.
+What worked for me is 
+- Enabling VT-D in the BIOS
+- Add virtio modules in Proxmox (we may even not need to do this, I haven't tested)
 ```
 nano /etc/modules
 ```
-Add the following (copy/paste) to the /etc/modules file:
 ```
 vfio
 vfio_iommu_type1
 vfio_pci
 vfio_virqfd
 ```
+- Blacklisting drivers in Proxmox (we may even not need to do this, I haven't tested)
+```
+nano /etc/modprobe.d/blacklist.conf
+```
+```
+blacklist radeon
+blacklist nouveau
+blacklist nvidia
+# iGPU
+blacklist snd_hda_intel
+blacklist snd_hda_codec_hdmi
+blacklist i915
+```
+- Set 2 options in kvm.conf, not sure what they do (we may even not need to do this, I haven't tested)
+```
+nano /etc/modprobe.d/kvm.conf
+```
+```
+options kvm ignore_msrs=Y report_ignored_msrs=0
+```
 
-That's it.
-
-If we do anything else, it will prevent our GPUs from outputing the VM's boot sequence, which means we get a black screen until the OS inside the VM loads the graphics driver.
+If we modify the grub entry like the guides say, it will prevent our GPUs from outputing the VM's boot sequence, which means we get a black screen until the OS inside the VM loads the graphics driver.
 
 Another thing we should do is setting up our BIOS so that the IGPU is used to boot the computer and run Proxmox. That way all of our discreet GPUs will be able to see the VM's boot sequence and we won't get the above issue.
 
