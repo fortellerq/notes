@@ -149,6 +149,11 @@ Can run with the latest i440 machine type (9.0 at this time), but according to [
 
 I have not been able to get GPU Passthrough to work for this.
 
+To add PS/2 mouse & keyboard to the VM, do this
+```
+args: -object 'input-linux,id=kbd1,evdev=/dev/input/by-path/YOURKEYBOARD,grab_all=on,repeat=on'
+```
+
 Since the Windows 98 installer will not know how to deal with modern hard drives, we first should format our VM drive on a Windows 10/11 VM with MBR, FAT32. Then reassign the drive to the Win 98 VM and proceed with installation.
 
 After installation, copy the Win98 folder of the Windows 98 CD to C: drive. We need to do this because the CD drive will disappear some time during the next step. Then go to Device Manager, select Plug and Play BIOS, update drivers, show all hardware, select PCI Bus. We'll need the Windows 98 CD for this part. After that, a few more devices will be recognised and installed. 
@@ -180,6 +185,7 @@ git clone https://github.com/hoangbv15/proxmox-vzbackup-rclone
 cd proxmox-vzbackup-rclone
 chmod +x vzbackup-rclone.sh
 ```
+Edit the script to set the path to your dumps. It would be `/var/lib/vz/dump` by default if you just dump to the same disk as your Proxmox installation.
 A full backup upload can be manually started with the command
 ```
 /root/proxmox-vzbackup-rclone/vzbackup-rclone.sh full-backup
