@@ -141,12 +141,17 @@ If we run the VM with an emulated GPU such as by using the VMWare compatible dis
 
 ## Windows 98
 
-Can run with the latest i440 machine type (9.0 at this time), but according to [this Vogons post](https://www.vogons.org/viewtopic.php?t=94012), we can get SB16 emulation if we pick 2.11. However picking 2.11 will make the machine unable to shut down fully.
+Can run with the latest i440 machine type (9.0 at this time), but according to [this Vogons post](https://www.vogons.org/viewtopic.php?t=94012), we can get SB16 emulation if we pick 2.11. However picking 2.11 will make the machine unable to shut down fully. For networking, select Intel E1000.
 
 I have not been able to get GPU Passthrough to work for this.
 
+Since the Windows 98 installer will not know how to deal with modern hard drives, we first should format our VM drive on a Windows 10/11 VM with MBR, FAT32. Then reassign the drive to the Win 98 VM and proceed with installation.
+
+After installation, go to Device Manager, select Plug and Play BIOS, update drivers, show all hardware, select PCI Bus. We'll need the Windows 98 CD for this part. After that, a few more devices will be recognised and installed. For networking, use the drivers from `intel_ethernet_drivers_v10x.zip`.
+
 Great resources:
 - https://www.vogons.org/viewtopic.php?t=94012
+- https://blog.stevesec.com/2024/05/03/installing-windows-98-on-a-proxmox-ve/
 
 ## Cloud Backups
 
