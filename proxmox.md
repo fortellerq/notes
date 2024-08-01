@@ -148,8 +148,14 @@ If we run the VM with an emulated GPU such as by using the VMWare compatible dis
 Can run with the latest i440 machine type (9.0 at this time), but according to [this Vogons post](https://www.vogons.org/viewtopic.php?t=94012), we can get SB16 emulation if we pick 2.11. However picking 2.11 will make the machine unable to shut down fully. For networking, select Intel E1000.
 
 I have not been able to get GPU Passthrough to work for this.
+Note that apparently, we shouldn't use Intel iGPU for booting Proxmox, because there is an issue with Intel iGPU that causes legacy GPUs to not work properly in Proxmox? This seems to make no difference in my setup.
 
-To add PS/2 mouse & keyboard to the VM, do this
+To add PS/2 mouse & keyboard to the VM, find out the path of your PS/2 devices by
+```
+cd /dev/input/by-path
+ls
+```
+Then add it to the VM by editting its conf file and adding to args
 ```
 args: -object 'input-linux,id=kbd1,evdev=/dev/input/by-path/YOURKEYBOARD,grab_all=on,repeat=on'
 ```
