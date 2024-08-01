@@ -151,7 +151,9 @@ I have not been able to get GPU Passthrough to work for this.
 
 Since the Windows 98 installer will not know how to deal with modern hard drives, we first should format our VM drive on a Windows 10/11 VM with MBR, FAT32. Then reassign the drive to the Win 98 VM and proceed with installation.
 
-After installation, go to Device Manager, select Plug and Play BIOS, update drivers, show all hardware, select PCI Bus. We'll need the Windows 98 CD for this part. After that, a few more devices will be recognised and installed. For networking, use the drivers from [Win98drivers.iso](disk-images/Win98drivers.iso).
+After installation, copy the Win98 folder of the Windows 98 CD to C: drive. We need to do this because the CD drive will disappear some time during the next step. Then go to Device Manager, select Plug and Play BIOS, update drivers, show all hardware, select PCI Bus. We'll need the Windows 98 CD for this part. After that, a few more devices will be recognised and installed. 
+
+For networking, use the drivers from [Win98drivers.iso](disk-images/Win98drivers.iso).
 
 This iso also contains 7z and NVidia drivers.
 
