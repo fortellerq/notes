@@ -151,7 +151,7 @@ I have tried passthrough a Soundblaster XFi but for some reason that freezes the
 
 ## Windows XP
 
-Needs q35-2.10 to stop the VM from crashing. Picking this will make XP 32 & 64 bit unable to shut down fully, and XP 32 bit shut down when trying to reboot.
+Needs q35-2.10 to stop the VM from crashing. Picking this will make XP 32 & 64 bit unable to shut down fully, and XP 32 bit shut down when trying to reboot. Virtual hard drive should be SATA.
 
 Since the Windows XP installer will not know how to deal with modern hard drives, we first should format our VM drive on a Windows 10/11 VM with MBR, NTFS. Then reassign the drive to the Win XP VM and proceed with installation.
 
