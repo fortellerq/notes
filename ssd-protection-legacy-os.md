@@ -1,3 +1,5 @@
+[Back to main page](README.md)
+
 # Protect your SSD when running legacy OSes
 ## Windows XP and Vista
 ### Disable autolayout
