@@ -52,7 +52,7 @@ Then add `pcie_acs_override=downstream` to `GRUB_CMDLINE_LINUX_DEFAULT` like bel
 ```
 GRUB_CMDLINE_LINUX_DEFAULT="quiet pcie_acs_override=downstream"
 ```
-This will enable a kernel patch which may make your IOMMU groupings more flexible, at the cost of security.
+This will enable a kernel patch which may make your IOMMU groupings more flexible, [at the cost of security](proxmox-acs-override-vulnerability.md).
 
 Here's what I have done:
 - Enabling VT-D in the BIOS
