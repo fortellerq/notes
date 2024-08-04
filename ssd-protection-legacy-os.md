@@ -25,3 +25,6 @@
 - In the right panel, double-click on "Readyboot"
 - Open the "Trace Session" tab
 - Remove the check from the "Enabled" checkbox
+
+### Install SSD Tweaker Pro version 4.0.1
+I won't post a link but you can search on the internet for a download of this tool, which will allow you to run the TRIM command manually. Version 4.0.1 should be compatible with both XP and Vista.
