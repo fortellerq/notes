@@ -59,16 +59,6 @@ As for sound, for XP and up we can get by with the GPU's HDMI/DP Audio output. I
 #### Modern machine 
 Firstly, do NOT follow the GPU passthrough guides out there blindly. For example, what I found is that adding boot flags to the grub entry did nothing for me, and GPU passthrough works without them. My hypothesis is that the latest versions of Proxmox already has built-in fixes for most PCI passthrough issues, and the guides are outdated. In the end, what matters is whether your motherboard and CPU supports hardware isolation which is called **IOMMU groupings**.
 
-Note: For motherboards with bad IOMMU groupings, there is a workaround called ACS override which sacrifices security for more IOMMU grouping possibilities.
-```
-nano /etc/default/grub
-```
-Then add `pcie_acs_override=downstream` to `GRUB_CMDLINE_LINUX_DEFAULT` like below
-```
-GRUB_CMDLINE_LINUX_DEFAULT="quiet pcie_acs_override=downstream"
-```
-This will enable a kernel patch which may make your IOMMU groupings more flexible, [at the cost of security](proxmox-acs-override-vulnerability.md).
-
 Here's what I have done:
 - Enabling VT-D in the BIOS
 - Add virtio modules in Proxmox (we may even not need to do this, I haven't tested)
@@ -105,7 +95,20 @@ options kvm ignore_msrs=Y report_ignored_msrs=0
 Another thing we should do is setting up our BIOS so that the IGPU is used to boot the computer and run Proxmox. That way all of our discreet GPUs will be able to see the VM's boot sequence and we won't get the above issue. Otherwise, we may get a black screen until the OS inside the VM loads the graphics driver
 
 #### Time machine
-The above configuration even though allows GPU Passthrough to function on this machine, I could not get the GPU to output the boot sequence at all. I'm not sure why.
+The above configuration even though allows GPU Passthrough to function on this machine, I could not get the GPU to output the boot sequence if the VM uses UEFI. If the VM uses SeaBIOS, the HD 6450 can output the boot sequence. The Geforce FX 5500 on the other hand will not output boot sequence for either types. However, I know the pass through works because I could get Windows 11 to output an image on the FX 5500 when the drivers load.
+
+Note that apparently, we shouldn't use Intel iGPU for booting Proxmox, because there is an issue with Intel iGPU that causes legacy GPUs to not work properly in Proxmox? This seems to make no difference in my setup.
+
+#### ACS Override kernel patch
+Note: For motherboards with bad IOMMU groupings, there is a workaround called ACS override which sacrifices security for more IOMMU grouping possibilities.
+```
+nano /etc/default/grub
+```
+Then add `pcie_acs_override=downstream` to `GRUB_CMDLINE_LINUX_DEFAULT` like below
+```
+GRUB_CMDLINE_LINUX_DEFAULT="quiet pcie_acs_override=downstream"
+```
+This will enable a kernel patch which may make your IOMMU groupings more flexible, [at the cost of security](proxmox-acs-override-vulnerability.md).
 
 ### GPU vbios dumping
 We can dump the GPU's vbios rom to supposedly preserve this ability to see the VM's boot sequence in case it breaks for whatever reason, but I have not confirmed whether this works. 
@@ -184,7 +187,6 @@ If we run the VM with an emulated GPU such as by using the VMWare compatible dis
 Can run with the latest i440 machine type (9.0 at this time), but according to [this Vogons post](https://www.vogons.org/viewtopic.php?t=94012), we can get SB16 emulation if we pick 2.11. However picking 2.11 will make the machine unable to shut down fully. For networking, select Intel E1000.
 
 I have not been able to get GPU Passthrough to work for this.
-Note that apparently, we shouldn't use Intel iGPU for booting Proxmox, because there is an issue with Intel iGPU that causes legacy GPUs to not work properly in Proxmox? This seems to make no difference in my setup.
 
 To add PS/2 mouse & keyboard to the VM, find out the path of your PS/2 devices by
 ```
