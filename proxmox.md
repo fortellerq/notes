@@ -44,6 +44,16 @@ As for sound, for XP and up we can get by with the GPU's HDMI/DP Audio output. I
 #### Modern machine 
 Firstly, do NOT follow the GPU passthrough guides out there blindly. For example, what I found is that adding boot flags to the grub entry did nothing for me, and GPU passthrough works without them. My hypothesis is that the latest versions of Proxmox already has built-in fixes for most PCI passthrough issues, and the guides are outdated. In the end, what matters is whether your motherboard and CPU supports hardware isolation which is called **IOMMU groupings**.
 
+Note: For motherboards with bad IOMMU groupings, there is a workaround called ACS override which sacrifices security for more IOMMU grouping possibilities.
+```
+nano /etc/default/grub
+```
+Then add `pcie_acs_override=downstream` to `GRUB_CMDLINE_LINUX_DEFAULT` like below
+```
+GRUB_CMDLINE_LINUX_DEFAULT="quiet pcie_acs_override=downstream"
+```
+This will enable a kernel patch which may make your IOMMU groupings more flexible, at the cost of security.
+
 Here's what I have done:
 - Enabling VT-D in the BIOS
 - Add virtio modules in Proxmox (we may even not need to do this, I haven't tested)
