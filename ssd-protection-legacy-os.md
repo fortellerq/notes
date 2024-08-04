@@ -2,6 +2,7 @@
 
 # Protect your SSD when running legacy OSes
 ## Windows XP and Vista
+Here's a convenient [7z](ssd-protection-legacy-os-files/ssd-registry-changes.7z) containing the `.reg` files for disabling autolayout, background defragmentation and prefetch (and superfetch for Vista)
 ### Disable autolayout
 - Browse to
 ```
