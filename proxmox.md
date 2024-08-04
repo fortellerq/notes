@@ -165,6 +165,8 @@ The id above `1102:000b` is the hardware id of the soundcard. This will force Pr
 
 Now, the XP VM will recognise the card and the drivers will install successfully. However, there is no sound output. Further investigation is pending.
 
+The sound card works fine on Vista with Windows default drivers, so it seems there is an issue with the drivers on XP. However, the same drivers works fine on a real XP machine, so I am at a lost.
+
 ## Windows XP
 
 Needs q35-2.10 to stop the VM from crashing. Picking this will make XP 32 & 64 bit unable to shut down fully, and XP 32 bit shut down when trying to reboot. Virtual hard drive should be SATA. We can enable Discard and SSD emulation and possibly use SSD Tweaker Pro to run Trim.
