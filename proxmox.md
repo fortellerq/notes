@@ -34,7 +34,7 @@ As for sound, for XP and up we can get by with the GPU's HDMI/DP Audio output. I
 
 ### Setting up Proxmox
 #### Modern machine 
-Firstly, do NOT follow the GPU passthrough guides out there blindly. Interestingly, what I found is that adding boot flags to the grub entry did nothing for me, and GPU passthrough works without them. My hypothesis is that the latest versions of Proxmox already has built-in fixes for most PCI passthrough issues, and the guides are outdated. In the end, what matters is whether your motherboard and CPU supports hardware isolation which is called **IOMMU groupings**.
+Firstly, do NOT follow the GPU passthrough guides out there blindly. For example, what I found is that adding boot flags to the grub entry did nothing for me, and GPU passthrough works without them. My hypothesis is that the latest versions of Proxmox already has built-in fixes for most PCI passthrough issues, and the guides are outdated. In the end, what matters is whether your motherboard and CPU supports hardware isolation which is called **IOMMU groupings**.
 
 Here's what I have done:
 - Enabling VT-D in the BIOS
