@@ -20,9 +20,17 @@ Machine 2 - **Time machine**
 - GPU2: Geforce FX 5500
 
 ## What is Proxmox
-Proxmox is a Linux-based Type 1 Hypervisor. If you used VMWare, VirtualBox or Parallels before, you know what a Hypervisor is. Those are Type 2 Hypervisors. Type 2s are slow and inefficient, but they are convenient because you can run them on top of Windows, Mac or Linux. Type 1s on the other hand are a beast. They have extremely low overheads and very efficient. You can directly pass through physical hardware to the VMs, getting all the native performance, while keeping the benefits of virtual machines such as ease of backing up, portability and even compatibility. 
+Proxmox is a Linux-based Type 1 Hypervisor. Some other Type 1 Hypervisors are Hyper-V (only when running on Windows Server), Red Hat Enterprise Virtualisation (RHEV) and vSphere (EXSi).
 
-Yes, you can run XP and Vista on unsupported motherboards and CPUs. I'm running XP and Vista on my modern machine via Proxmox, with full GPU acceleration. And I'm running regular full backups and uploading them straight to the cloud, **all while the VMs are running**. How cool is that?
+If you used VMWare, VirtualBox or Parallels before, you know what a Hypervisor is. Those are Type 2 Hypervisors. Type 2s are slow and inefficient, but they are convenient because you can run them on top of Windows, Mac or Linux, and easily share files between the host and the guest.
+
+Type 1s on the other hand are a beast. They lack the convenience features, but they have extremely low overheads and very efficient. You can directly pass through physical hardware to the VMs, getting all the native performance, while keeping the benefits of virtual machines such as ease of backing up, portability and even compatibility. If running a XP VM in VMWare feels sluggish and laggy at times, running XP in a Proxmox VM feels like native, or even faster since hardware that supports XP are getting older.
+
+Yes, you can run XP and Vista, and even Windows 98 on unsupported motherboards and CPUs (*). I'm running XP and Vista on my modern machine via Proxmox, with full GPU acceleration. And I'm running regular full backups and uploading them straight to the cloud, **all while the VMs are running**. How cool is that?
+
+(*) _Provided that the OS runs on a generation of x86 CPUs that KVM supports. KVM is the open source virtualisation software that Proxmox uses under the hood. At the moment, KVM should support all the way back to DOS, even though Proxmox only lists Windows 2000 minimum._
+
+Why Proxmox? Because it is Linux, free and open source, and has a huge community.
 
 ## Pre-requisites
 ### Hardware
