@@ -155,6 +155,8 @@ I have tried passthrough a Soundblaster XFi but for some reason that freezes the
 
 Needs q35-2.10 to stop the VM from crashing. Picking this will make XP 32 & 64 bit unable to shut down fully, and XP 32 bit shut down when trying to reboot. Virtual hard drive should be SATA.
 
+[Here is the config of my XP VM](images/proxmox-xp-conf.jpg)
+
 Since the Windows XP installer will not know how to deal with modern hard drives, we first should format our VM drive on a Windows 10/11 VM with MBR, NTFS. Then reassign the drive to the Win XP VM and proceed with installation.
 
 If installing XP 32 bit, we need to press F6 when the installer begins and install a AHCI driver. We'll need to attach [xp-satadrivers-ich9-flp.img](disk-images/xp-satadrivers-ich9-flp.img) as a floppy for the installer to see it. To do this, upload the img to proxmox, and add this line to the vm's conf
@@ -172,6 +174,8 @@ Great resources:
 
 Can run perfectly with q35 latest, no additional AHCI drivers required.
 Virtual hard drive should be SATA. We can enable Discard and SSD emulation and possibly use SSD Tweaker Pro to run Trim.
+
+[Here is the config of my Vista VM](images/proxmox-vista-conf.jpg)
 
 Since the Windows Vista installer will not know how to deal with modern hard drives, we first should format our VM drive on a Windows 10/11 VM with MBR, NTFS. Then reassign the drive to the Win Vista VM and proceed with installation.
 
