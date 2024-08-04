@@ -19,6 +19,11 @@ Machine 2 - **Time machine**
 - GPU1: AMD HD 6450
 - GPU2: Geforce FX 5500
 
+## What is Proxmox
+Proxmox is a Linux-based Type 1 Hypervisor. If you used VMWare, VirtualBox or Parallels before, you know what a Hypervisor is. Those are Type 2 Hypervisors. Type 2s are slow and inefficient, but they are convenient because you can run them on top of Windows, Mac or Linux. Type 1s on the other hand are a beast. They have extremely low overheads and very efficient. You can directly pass through physical hardware to the VMs, getting all the native performance, while keeping the benefits of virtual machines such as ease of backing up, portability and even compatibility. 
+
+Yes, you can run XP and Vista on unsupported motherboards and CPUs. I'm running XP and Vista on my modern machine via Proxmox, with full GPU acceleration. And I'm running regular full backups and uploading them straight to the cloud, **all while the VMs are running**. How cool is that?
+
 ## Pre-requisites
 ### Hardware
 In order for any of this to work well, your motherboard and CPU need to support hardware isolation which is called **IOMMU groupings**. I believe this technology is called VT-d in most motherboard BIOS. But just supporting and turning on VT-d is not enough. the motherboard's IOMMU groupings need to be separated enough. 
