@@ -153,7 +153,7 @@ I have tried passthrough a Soundblaster XFi but for some reason that freezes the
 
 ## Windows XP
 
-Needs q35-2.10 to stop the VM from crashing. Picking this will make XP 32 & 64 bit unable to shut down fully, and XP 32 bit shut down when trying to reboot. Virtual hard drive should be SATA.
+Needs q35-2.10 to stop the VM from crashing. Picking this will make XP 32 & 64 bit unable to shut down fully, and XP 32 bit shut down when trying to reboot. Virtual hard drive should be SATA. We can enable Discard and SSD emulation and possibly use SSD Tweaker Pro to run Trim.
 
 ![Here is the config of my XP VM](images/proxmox-xp-conf.jpg)
 
@@ -164,8 +164,6 @@ If installing XP 32 bit, we need to press F6 when the installer begins and insta
 args: -fda /var/lib/vz/template/iso/xp-satadrivers-ich9-flp.img
 ```
 After pressing F6, pick the one that says **Intel(R) ICH9R/DO/DH SATA AHCI Controller**
-
-Virtual hard drive should be SATA. We can enable Discard and SSD emulation and possibly use SSD Tweaker Pro to run Trim.
 
 Great resources:
 - https://forum.mattkc.com/viewtopic.php?t=206
