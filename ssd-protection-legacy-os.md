@@ -3,15 +3,24 @@
 # Protect your SSD when running legacy OSes
 ## Windows XP and Vista
 ### Disable autolayout
-- Browse to [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OptimalLayout]
+- Browse to
+```
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OptimalLayout]
+```
 - Add a new DWORD, call EnableAutoLayout, leave value as 0
 
 ### Disable background defragmentation
-- Browse to [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction]
+- Browse to
+```
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction]
+```
 - Change "Enable" to "N"
 
 ### Disable prefetch
-- Browse to [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters]
+- Browse to
+```
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters]
+```
 - Change "EnablePrefetcher" to 0
 - (Vista only) Change "EnableSuperfetch" to 0
 - Delete all files in C:\Windows\Prefetch
