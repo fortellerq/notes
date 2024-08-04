@@ -32,7 +32,7 @@ Next, the GPU needs to support the OS. This means we need a GPU from the era tha
 - Nvidia GTX 750 Ti for Windows XP
 
 For consumer Nvidia cards on Windows XP up to Windows 7, there is an issue with official drivers which disables itself when it detects that we are running in a VM. The affected drivers are roughly from version 337.88, 340.52 and above.
-To get pass this issue, we need to put this to our vm arguments `-cpu host,kvm=off` and use driver version 340.52.
+To get pass this issue, we need to put this to our vm arguments `-cpu host,kvm=off`. This apparently works for driver version 337.88 and 340.52. For newer drivers, we apparently need to disable some kvm optimisations, which will tank performance so I'm not very interested.
 
 Professional Nvidia (i.e. Quadro) and AMD cards do not have this issue.
 
