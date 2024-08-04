@@ -8,18 +8,26 @@ Proxmox version: 8.2
 Machine 1 - **Modern machine**
 - CPU: i7 6700K
 - iGPU: Intel HD 530
+- Asus Maximus Hero VIII motherboard
 - GPU1: RTX 3090
 - GPU2: AMD R5 340X/R7 250
   
 Machine 2 - **Time machine**
 - CPU: i7 3770
-- iGPU: Intel HD 4000 
+- iGPU: Intel HD 4000
+- Dell Optiplex 7010 MT motherboard
 - GPU1: AMD HD 6450
 - GPU2: Geforce FX 5500
 
 ## Pre-requisites
 ### Hardware
-In order for any of this to work well, the hardware needs to support the OS. This means we need a GPU from the era that has drivers for the specific OS we need. For example:
+In order for any of this to work well, your motherboard and CPU need to support hardware isolation which is called **IOMMU groupings**. I believe this technology is called VT-d in most motherboard BIOS. But just supporting and turning on VT-d is not enough. the motherboard's IOMMU groupings need to be separated enough. 
+
+In layman's terms, this means the motherboard can allow some important hardware components (such as each PCI/PCIe slot) to be individually isolated and passed through to a Proxmox virtual machine. Without proper IOMMU groupings, hardware passthrough might be extremely painful or even impossible.
+
+My modern machine has decent IOMMU groupings but not great. It has 3 long PCIe slots, 2 of which are separately grouped, which means I can pass through 2 GPUs to 2 different VMs. It has 3 PCIe x1 slots, however 2 out of 3 are disabled if one of the long PCIe slots mentioned above are occupied, and the remaining one seems to be grouped with either the SATA or the Ethernet controller (even though it's shown to have its own IOMMU grouping in Proxmox). This causes the whole Proxmos host to freeze if I pass through the card installed on that slot to a VM.
+
+Next, the GPU needs to support the OS. This means we need a GPU from the era that has drivers for the specific OS we need. For example:
 - Nvidia FX 5500 for Windows 98
 - Nvidia GTX 750 Ti for Windows XP
 
