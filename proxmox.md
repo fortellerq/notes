@@ -34,8 +34,9 @@ As for sound, for XP and up we can get by with the GPU's HDMI/DP Audio output. I
 
 ### Setting up Proxmox
 #### Modern machine 
-DO NOT modify the grub entry! Add all those boot flags and blacklisting the drivers gave me all sorts of issues.
-What worked for me is 
+Firstly, do NOT follow the GPU passthrough guides out there blindly. Interestingly, what I found is that adding boot flags to the grub entry did nothing for me, and GPU passthrough works without them. My hypothesis is that the latest versions of Proxmox already has built-in fixes for most PCI passthrough issues, and the guides are outdated. In the end, what matters is whether your motherboard and CPU supports hardware isolation which is called **IOMMU groupings**.
+
+Here's what I have done:
 - Enabling VT-D in the BIOS
 - Add virtio modules in Proxmox (we may even not need to do this, I haven't tested)
 ```
@@ -68,9 +69,7 @@ nano /etc/modprobe.d/kvm.conf
 options kvm ignore_msrs=Y report_ignored_msrs=0
 ```
 
-If we modify the grub entry like the guides say, it will prevent our GPUs from outputing the VM's boot sequence, which means we get a black screen until the OS inside the VM loads the graphics driver.
-
-Another thing we should do is setting up our BIOS so that the IGPU is used to boot the computer and run Proxmox. That way all of our discreet GPUs will be able to see the VM's boot sequence and we won't get the above issue.
+Another thing we should do is setting up our BIOS so that the IGPU is used to boot the computer and run Proxmox. That way all of our discreet GPUs will be able to see the VM's boot sequence and we won't get the above issue. Otherwise, we may get a black screen until the OS inside the VM loads the graphics driver
 
 #### Time machine
 The above configuration even though allows GPU Passthrough to function on this machine, I could not get the GPU to output the boot sequence at all. I'm not sure why.
