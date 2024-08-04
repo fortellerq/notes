@@ -38,6 +38,8 @@ In order for any of this to work well, your motherboard and CPU need to support 
 
 In layman's terms, this means the motherboard can allow some important hardware components (such as each PCI/PCIe slot) to be individually isolated and passed through to a Proxmox virtual machine. Without proper IOMMU groupings, hardware passthrough might be extremely painful or even impossible.
 
+This is why if you want a machine to run Proxmox or any other type 1 hypervisor with hardware pass through, you should build a machine around that requirement. I believe that server motherboards will more likely satisfy this requirement, consumer motherboards will likely be hit or miss.
+
 My modern machine has decent IOMMU groupings but not great. It has 3 long PCIe slots, 2 of which are separately grouped, which means I can pass through 2 GPUs to 2 different VMs. It has 3 PCIe x1 slots, however 2 out of 3 are disabled if one of the long PCIe slots mentioned above are occupied, and the remaining one seems to be grouped with either the SATA or the Ethernet controller (even though it's shown to have its own IOMMU grouping in Proxmox). This causes the whole Proxmos host to freeze if I pass through the card installed on that slot to a VM. This pretty much means I can have 1 main GPU for modern games, 1 retro GPU for XP/Vista, and no EAX sound card is possible, so I have to use sound from the graphics card's HDMI/DP output.
 
 Next, the GPU needs to support the OS. This means we need a GPU from the era that has drivers for the specific OS we need. For example:
