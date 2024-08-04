@@ -152,7 +152,18 @@ Go to the GPU device, the line should start with `pci`. Add this to the comma se
 The 3 backlashes are needed because for some reason, Proxmox tries to find the rom in the wrong location even if we put in the full path (in this case it is `/root/gpuroms/rtx3090.rom`), so we need to get back to the root for the path to work.
 
 ### Soundcard passthrough
-I have tried passthrough a Soundblaster XFi but for some reason that freezes the entire physical machine. Not sure what's up with that.
+I have tried passthrough a Soundblaster XFi but that freezes the entire physical machine. It seems the reason is that the Proxmox host somehow gets a hold of the card, which would be weird, because Proxmox doesn't have any audio output.
+
+The freezing stops happening if I do this
+```
+nano /etc/modprobe.d/vfio.conf
+```
+```
+options vfio-pci ids=1102:000b
+```
+The id above `1102:000b` is the hardware id of the soundcard. This will force Proxmox to not use this soundcard.
+
+Now, the XP VM will recognise the card and the drivers will install successfully. However, there is no sound output. Further investigation is pending.
 
 ## Windows XP
 
