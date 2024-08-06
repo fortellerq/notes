@@ -40,7 +40,7 @@ In layman's terms, this means the motherboard can allow some important hardware 
 
 This is why if you want a machine to run Proxmox or any other type 1 hypervisor with hardware pass through, you should build a machine around that requirement. I believe that server motherboards will more likely satisfy this requirement, consumer motherboards will likely be hit or miss.
 
-My modern machine has decent IOMMU groupings but not great. It has 3 long PCIe slots, 2 of which are separately grouped, which means I can pass through 2 GPUs to 2 different VMs. It has 3 PCIe x1 slots, however 2 out of 3 are disabled if one of the long PCIe slots mentioned above are occupied, and the remaining one seems to be grouped with either the SATA or the Ethernet controller (even though it's shown to have its own IOMMU grouping in Proxmox). This causes the whole Proxmos host to freeze if I pass through the card installed on that slot to a VM. This pretty much means I can have 1 main GPU for modern games, 1 retro GPU for XP/Vista, and no EAX sound card is possible, so I have to use sound from the graphics card's HDMI/DP output.
+My modern machine has decent IOMMU groupings but not great. It has 3 long PCIe slots, 2 of which are separately grouped, which means I can pass through 2 GPUs to 2 different VMs. It has 3 PCIe x1 slots, but 2 out of 3 are disabled if one of the long PCIe slots mentioned above are occupied. This means I can have 1 main GPU for modern games, 1 retro GPU for XP/Vista, and 1 PCIe x1 slot for a sound card or whichever PCIe device.
 
 Next, the GPU needs to support the OS. This means we need a GPU from the era that has drivers for the specific OS we need. For example:
 - Nvidia FX 5500 for Windows 98
@@ -92,7 +92,9 @@ nano /etc/modprobe.d/kvm.conf
 options kvm ignore_msrs=Y report_ignored_msrs=0
 ```
 
-Another thing we should do is setting up our BIOS so that the IGPU is used to boot the computer and run Proxmox. That way all of our discreet GPUs will be able to see the VM's boot sequence and we won't get the above issue. Otherwise, we may get a black screen until the OS inside the VM loads the graphics driver
+Another thing we should do is setting up our BIOS so that the IGPU is used to boot the computer and run Proxmox. That way all of our discreet GPUs will be able to see the VM's boot sequence and we won't get the above issue. Otherwise, we may get a black screen until the OS inside the VM loads the graphics driver.
+
+Apparently, if the GPU is used to boot Proxmox, its vbios is touched somehow which prevents the card from showing VM boot screen.
 
 #### Time machine
 The above configuration even though allows GPU Passthrough to function on this machine, I could not get the GPU to output the boot sequence if the VM uses UEFI. If the VM uses SeaBIOS, the HD 6450 can output the boot sequence. The Geforce FX 5500 on the other hand will not output boot sequence for either types. However, I know the pass through works because I could get Windows 11 to output an image on the FX 5500 when the drivers load.
@@ -163,9 +165,11 @@ options vfio-pci ids=1102:000b
 ```
 The id above `1102:000b` is the hardware id of the soundcard. This will force Proxmox to not use this soundcard.
 
-Now, the XP VM will recognise the card and the drivers will install successfully. However, there is no sound output. Further investigation is pending.
+Now, the XP VM will recognise the card and the drivers will install successfully. However, there is no sound output. It seems there is an issue with the drivers of the XFi on XP. The sound card works fine on Vista with Windows default drivers. However, if I boot into XP with the drivers installed and the sound card attached, the card isn't released properly once the XP VM is shut down. If I boot into Vista again, it does not see the sound card, and only a reboot of the Proxmox host will fix it.
 
-The sound card works fine on Vista with Windows default drivers, so it seems there is an issue with the drivers on XP. However, the same drivers works fine on a real XP machine, so I am at a lost.
+However, the same drivers works fine on a real XP machine. 
+
+Perhaps this is a futile endeavour after all.
 
 ## Windows XP
 
