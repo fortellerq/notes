@@ -32,7 +32,7 @@ Yes, you can run XP and Vista, and even Windows 98 on unsupported motherboards a
 
 Why Proxmox? Because it is Linux, free and open-source, and has a huge community.
 
-There is a big catch. Type 1 hypervisors such as Proxmox have a very steep learning curve, it is not for the faint of heart. For instance, Proxmox doesn't come with a desktop environment, and you need another computer to use its web interface.
+There is a big catch. Type 1 hypervisors such as Proxmox have a very steep learning curve, it is not for the faint of heart. For instance, Proxmox doesn't come with a desktop environment, and you need another computer to use its web interface. Moreover, you'll need to learn (usually the hard way) which combinations of hardware work well and which don't. Also, while you don't have to be a Linux wizard, having fluency in it helps tremendously.
 
 ## Pre-requisites
 ### Hardware
