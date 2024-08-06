@@ -28,25 +28,27 @@ Type 1s on the other hand are a beast. They lack the convenience features, but t
 
 Yes, you can run XP and Vista, and even Windows 98 on unsupported motherboards and CPUs (*). I'm running XP and Vista on my modern machine via Proxmox, with full GPU acceleration. And I'm running regular full backups and uploading them straight to the cloud, **all while the VMs are running**. How cool is that?
 
-(*) _Provided that the OS runs on a generation of x86 CPUs that KVM supports. KVM is the open source virtualisation software that Proxmox uses under the hood. At the moment, KVM should support all the way back to DOS, even though Proxmox only lists Windows 2000 minimum._
+(*) _Provided that the OS runs on a generation of x86 CPUs that KVM supports. KVM is the open-source virtualisation software that Proxmox uses under the hood. At the moment, KVM should support all the way back to DOS, even though Proxmox only lists Windows 2000 minimum._
 
-Why Proxmox? Because it is Linux, free and open source, and has a huge community.
+Why Proxmox? Because it is Linux, free and open-source, and has a huge community.
+
+There is a big catch. Type 1 hypervisors such as Proxmox have a very steep learning curve, it is not for the faint of heart. For instance, Proxmox doesn't come with a desktop environment, and you need another computer to use its web interface.
 
 ## Pre-requisites
 ### Hardware
-In order for any of this to work well, your motherboard and CPU need to support hardware isolation which is called **IOMMU groupings**. I believe this technology is called VT-d in most motherboard BIOS. But just supporting and turning on VT-d is not enough. the motherboard's IOMMU groupings need to be separated enough. 
+For any of this to work well, your motherboard and CPU need to support hardware isolation which is called **IOMMU groupings**. I believe this technology is called VT-d in most motherboard BIOS. But just supporting and turning on VT-d is not enough. the motherboard's IOMMU groupings need to be separated enough. 
 
 In layman's terms, this means the motherboard can allow some important hardware components (such as each PCI/PCIe slot) to be individually isolated and passed through to a Proxmox virtual machine. Without proper IOMMU groupings, hardware passthrough might be extremely painful or even impossible.
 
-This is why if you want a machine to run Proxmox or any other type 1 hypervisor with hardware pass through, you should build a machine around that requirement. I believe that server motherboards will more likely satisfy this requirement, consumer motherboards will likely be hit or miss.
+This is why if you want a machine to run Proxmox or any other type 1 hypervisor with hardware pass-through, you should build a machine around that requirement. I believe that server motherboards will more likely satisfy this requirement, consumer motherboards will likely be hit or miss.
 
-My modern machine has decent IOMMU groupings but not great. It has 3 long PCIe slots, 2 of which are separately grouped, which means I can pass through 2 GPUs to 2 different VMs. It has 3 PCIe x1 slots, but 2 out of 3 are disabled if one of the long PCIe slots mentioned above are occupied. This means I can have 1 main GPU for modern games, 1 retro GPU for XP/Vista, and 1 PCIe x1 slot for a sound card or whichever PCIe device.
+My modern machine has decent IOMMU groupings but not great. It has 3 long PCIe slots, 2 of which are separately grouped, which means I can pass through 2 GPUs to 2 different VMs. It has 3 PCIe x1 slots, but 2 out of 3 are disabled if one of the long PCIe slots mentioned above is occupied. This means I can have 1 main GPU for modern games, 1 retro GPU for XP/Vista, and 1 PCIe x1 slot for a sound card or whichever PCIe device (Note that my Sound Blaster XFi doesn't work on XP VMs for some strange reason).
 
 Next, the GPU needs to support the OS. This means we need a GPU from the era that has drivers for the specific OS we need. For example:
 - Nvidia FX 5500 for Windows 98
 - Nvidia GTX 750 Ti for Windows XP
 
-For consumer Nvidia cards on Windows XP up to Windows 7, there is an issue with official drivers which disables itself when it detects that we are running in a VM. The affected drivers are roughly from version 337.88, 340.52 and above.
+For consumer Nvidia cards on Windows XP up to Windows 7, there is an issue with official drivers which disables itself when it detects that we are running in a VM. The affected drivers are roughly from versions 337.88, 340.52 and above.
 To get pass this issue, we need to put this to our vm arguments `-cpu host,kvm=off`. I've verified that this works for driver version 337.88 and 340.52. For newer drivers, we apparently need to disable some kvm optimisations, which will tank performance so I'm not very interested.
 
 Professional Nvidia (i.e. Quadro) and AMD cards do not have this issue.
@@ -57,7 +59,7 @@ As for sound, for XP and up we can get by with the GPU's HDMI/DP Audio output. I
 
 ### Setting up Proxmox
 #### Modern machine 
-Firstly, do NOT follow the GPU passthrough guides out there blindly. For example, what I found is that adding boot flags to the grub entry did nothing for me, and GPU passthrough works without them. My hypothesis is that the latest versions of Proxmox already has built-in fixes for most PCI passthrough issues, and the guides are outdated. In the end, what matters is whether your motherboard and CPU supports hardware isolation which is called **IOMMU groupings**.
+Firstly, do NOT follow the GPU passthrough guides out there blindly. For example, what I found is that adding boot flags to the grub entry did nothing for me, and GPU passthrough works without them. My hypothesis is that the latest versions of Proxmox already have built-in fixes for most PCI passthrough issues, and the guides are outdated. In the end, what matters is whether your motherboard and CPU support hardware isolation which is called **IOMMU groupings**.
 
 Here's what I have done:
 - Enabling VT-D in the BIOS
@@ -92,12 +94,12 @@ nano /etc/modprobe.d/kvm.conf
 options kvm ignore_msrs=Y report_ignored_msrs=0
 ```
 
-Another thing we should do is setting up our BIOS so that the IGPU is used to boot the computer and run Proxmox. That way all of our discreet GPUs will be able to see the VM's boot sequence and we won't get the above issue. Otherwise, we may get a black screen until the OS inside the VM loads the graphics driver.
+Another thing we should do is set up our BIOS so that the IGPU is used to boot the computer and run Proxmox. That way all of our discreet GPUs will be able to see the VM's boot sequence and we won't get the above issue. Otherwise, we may get a black screen until the OS inside the VM loads the graphics driver.
 
 Apparently, if the GPU is used to boot Proxmox, its vbios is touched somehow which prevents the card from showing VM boot screen.
 
 #### Time machine
-The above configuration even though allows GPU Passthrough to function on this machine, I could not get the GPU to output the boot sequence if the VM uses UEFI. If the VM uses SeaBIOS, the HD 6450 can output the boot sequence. The Geforce FX 5500 on the other hand will not output boot sequence for either types. However, I know the pass through works because I could get Windows 11 to output an image on the FX 5500 when the drivers load.
+The above configuration even though allows GPU Passthrough to function on this machine, I could not get the GPU to output the boot sequence if the VM uses UEFI. If the VM uses SeaBIOS, the HD 6450 can output the boot sequence. The Geforce FX 5500 on the other hand will not output boot sequence for either type. However, I know the pass-through works because I could get Windows 11 to output an image on the FX 5500 when the drivers load.
 
 Note that apparently, we shouldn't use Intel iGPU for booting Proxmox, because there is an issue with Intel iGPU that causes legacy GPUs to not work properly in Proxmox? This seems to make no difference in my setup.
 
@@ -121,8 +123,8 @@ echo 1 > rom
 cat rom > /tmp/romfile
 echo 0 > rom
 ```
-However if we do this while the IGPU is used for booting, we'll get this error `cat: rom: Input/output error`.
-In order to dump this, here are the steps that worked for me:
+However, if we do this while the IGPU is used for booting, we'll get this error `cat: rom: Input/output error`.
+To dump this, here are the steps that worked for me:
 ```
 find /sys/devices -name rom
 ```
@@ -144,11 +146,11 @@ echo 0 > [paste the thing]
 setpci -s [device id] COMMAND=0:2
 ```
 
-Once we have our romfile, for example if we put it at `~/gpuroms/rtx3090.rom`, here's how to add it to the VM.
+Once we have our romfile, for example, if we put it at `~/gpuroms/rtx3090.rom`, here's how to add it to the VM.
 ```
 nano /etc/pve/qemu-server/[vmid].conf
 ```
-Go to the GPU device, the line should start with `pci`. Add this to the comma separated list
+Go to the GPU device, the line should start with `pci`. Add this to the comma-separated list
 `romfile=../../../root/gpuroms/rtx3090.rom`
 
 The 3 backlashes are needed because for some reason, Proxmox tries to find the rom in the wrong location even if we put in the full path (in this case it is `/root/gpuroms/rtx3090.rom`), so we need to get back to the root for the path to work.
@@ -167,9 +169,9 @@ The id above `1102:000b` is the hardware id of the soundcard. This will force Pr
 
 Now, the XP VM will recognise the card and the drivers will install successfully. However, there is no sound output. It seems there is an issue with the drivers of the XFi on XP. The sound card works fine on Vista with Windows default drivers. However, if I boot into XP with the drivers installed and the sound card attached, the card isn't released properly once the XP VM is shut down. If I boot into Vista again, it does not see the sound card, and only a reboot of the Proxmox host will fix it.
 
-However, the same drivers works fine on a real XP machine. 
+However, the same drivers work fine on a real XP machine. 
 
-Perhaps this is a futile endeavour after all.
+Perhaps getting this card to work under XP is a futile endeavour after all.
 
 ## Windows XP
 
@@ -253,7 +255,7 @@ A full backup upload can be manually started with the command
 ```
 However keep in mind that the process will take a **very** long time, and the vnc connection might time out. If it does, the session will close and the upload will stop. So it's best to use a cron task for this.
 
-To schedule this clone weekly, we could use vanilla cron, but that requires the computer to be on at a specific time. So we'll instead use `anacron`, which will allow us to run tasks with a best effort basis.
+To schedule this clone weekly, we could use vanilla cron, but that requires the computer to be on at a specific time. So we'll instead use `anacron`, which will allow us to run tasks on a non-absolute timing, best-effort basis.
 To install `anacron`:
 ```
 apt install anacron
