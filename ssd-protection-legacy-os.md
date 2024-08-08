@@ -35,6 +35,9 @@ Here's a convenient [7z](ssd-protection-legacy-os-files/ssd-registry-changes.7z)
 - In the right panel, double-click on "Readyboot"
 - Open the "Trace Session" tab
 - Remove the check from the "Enabled" checkbox
+- Go to Stop Condition tab, change the last textbox to "0" so it doesn't automatically enable on reboot.
 
 ### Install SSD Tweaker Pro version 4.0.1
 I won't post a link but you can search on the internet for a download of this tool, which will allow you to run the TRIM command manually. Version 4.0.1 should be compatible with both XP and Vista.
+
+Another tool called [Naraeon SSD](https://github.com/ebangin127/naraeon-ssd) Tools is open source and free and can also do manual trimming. However, this tool is ancient and I'm not sure how well it works.
