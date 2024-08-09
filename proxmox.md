@@ -182,12 +182,15 @@ systemctl disable --now pve-ha-lrm.service pve-ha-crm.service
 ```
 These two seem to be responsible for lots of low end drive deaths.
 
-You can also append
+You can also
+```
+nano /etc/systemd/journald.conf
+```
 ```
 Storage=volatile
 ForwardToSyslog=no
 ```
-to `/etc/systemd/journald.conf` to only log to RAM.
+Append the above to only log to RAM.
 
 ## Windows XP
 
