@@ -173,6 +173,22 @@ However, the same drivers work fine on a real XP machine.
 
 Perhaps getting this card to work under XP is a futile endeavour after all.
 
+### Proxmox logging to RAM
+If are running Proxmox for personal use, we don't need persistence in logging that much. Here's a few ways I found on reddit to reduce logging written to disk
+
+If you're not running in cluster mode, you can 
+```
+systemctl disable --now pve-ha-lrm.service pve-ha-crm.service
+```
+These two seem to be responsible for lots of low end drive deaths.
+
+You can also append
+```
+Storage=volatile
+ForwardToSyslog=no
+```
+to `/etc/systemd/journald.conf` to only log to RAM.
+
 ## Windows XP
 
 Needs q35-2.10 to stop the VM from crashing. Picking this will make XP 32 & 64 bit unable to shut down fully, and XP 32 bit shut down when trying to reboot. Virtual hard drive should be SATA. We can enable Discard and SSD emulation and possibly use SSD Tweaker Pro to run Trim.
