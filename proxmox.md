@@ -240,6 +240,7 @@ For this to work, first we need to setup rclone. First install rclone
 ```
 apt-get update
 apt-get install rclone
+apt-get install git
 ```
 Then follow this guide [here](https://rclone.org/pcloud/) to set it up with pCloud or whichever cloud backup provider you use (which is compatible with rclone).
 After that, simply git clone the script:
