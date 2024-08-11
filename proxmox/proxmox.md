@@ -173,24 +173,8 @@ However, the same drivers work fine on a real XP machine.
 
 Perhaps getting this card to work under XP is a futile endeavour after all.
 
-### Proxmox logging to RAM
-If are running Proxmox for personal use, we don't need persistence in logging that much. Here's a few ways I found on reddit to reduce logging written to disk
-
-If you're not running in cluster mode, you can 
-```
-systemctl disable --now pve-ha-lrm.service pve-ha-crm.service
-```
-These two seem to be responsible for lots of low end drive deaths.
-
-You can also
-```
-nano /etc/systemd/journald.conf
-```
-```
-Storage=volatile
-ForwardToSyslog=no
-```
-Append the above to only log to RAM.
+### SSD Protection
+Go [here](ssd-protection-proxmox.md) to learn about how to protect your Proxmox installed SSD from frequent writes.
 
 ## Windows XP
 
