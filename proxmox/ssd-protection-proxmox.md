@@ -35,3 +35,5 @@ nano /etc/systemd/journald.conf
 Storage=volatile
 ForwardToSyslog=no
 ```
+## Disable all logging
+https://forum.proxmox.com/threads/is-it-possible-to-disable-all-logs-local-completly.52067/
