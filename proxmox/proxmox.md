@@ -155,6 +155,13 @@ Go to the GPU device, the line should start with `pci`. Add this to the comma-se
 
 The 3 backlashes are needed because for some reason, Proxmox tries to find the rom in the wrong location even if we put in the full path (in this case it is `/root/gpuroms/rtx3090.rom`), so we need to get back to the root for the path to work.
 
+### VirtIO drivers
+https://pve.proxmox.com/wiki/Windows_VirtIO_Drivers
+
+This driver is a bit like VMWare tools, but mainly for insanely fast networking and disk IO within the VMs. The drivers should work for Windows XP and up. 
+
+The Linux kernel supports VirtIO out of the box, so this separate driver ISO is only required for Windows.
+
 ### Soundcard passthrough
 I have tried passthrough a Soundblaster XFi but that freezes the entire physical machine. It seems the reason is that the Proxmox host somehow gets a hold of the card, which would be weird, because Proxmox doesn't have any audio output.
 
@@ -177,12 +184,25 @@ Perhaps getting this card to work under XP is a futile endeavour after all.
 Go [here](ssd-protection-proxmox.md) to learn about how to protect your Proxmox installed SSD from frequent writes.
 
 ## Windows XP
+### Machine type
+q35-2.10. Any newer version of q35 will crash the XP installer by default. 
 
-Needs q35-2.10 to stop the VM from crashing. Picking this will make XP 32 & 64 bit unable to shut down fully, and XP 32 bit shut down when trying to reboot. Virtual hard drive should be SATA. We can enable Discard and SSD emulation and possibly use SSD Tweaker Pro to run Trim.
+If we go to the Options tab and turn off APCI, then newer versions of q35 will not crash the XP installer, but we'll have other problems with hardware drivers that make it not worth it. So we should stick to q35-2.10. Note that this will make XP 32 & 64 bit unable to shut down fully, and XP 32 bit shut down when trying to reboot.
 
+Also note that it might be possible to forcefully insert a newer community compiled apci.sys driver for XP, but I haven't tested this. Losing the ability to shut down fully from inside the VM isn't big deal, we can always force shut down the VM from the Proxmox dashboard.
+
+### Virtual hard drive
+Since the Windows XP & Vista installer will not know how to deal with modern hard drives, we first should create & format our VM drive on a Windows 10/11 VM with MBR, NTFS. Then reassign the drive to the Win XP/Vista VM and proceed with installation. 
+
+For the installation, virtual hard disk must be either IDE or SATA. We can enable Discard and SSD emulation and possibly use SSD Tweaker Pro to run Trim. For XP 64 bit, to prepare for VirtIO drivers installation, add a dummy 1GB virtual hard disk and select the VirtIO protocol. After the installation, Windows will ask for drivers for an unknown SCSI controller, and we can find the drivers in the VirtIO ISO. 
+
+After successfully installing the VirtIO SCSI controller, we can stop the VM, detach our boot disk, reattach it using the VirtIO protocol, make sure Discard is checked, and the device is selected in Boot Order in the Options tab. Now we can remove the dummy 1GB VirtIO disk.
+
+### Network card
+VirtIO. After installation, Windows will ask for drivers for unknown Ethernet card, and we can find drivers in the VirtIO ISO. Alternatively, select Realtek 8139 since it will work under XP and Vista by default, no need for 3rd party drivers. 
+
+### Other notes
 ![Here is the config of my XP VM](images/proxmox-xp-conf.jpg)
-
-Since the Windows XP installer will not know how to deal with modern hard drives, we first should format our VM drive on a Windows 10/11 VM with MBR, NTFS. Then reassign the drive to the Win XP VM and proceed with installation.
 
 If installing XP 32 bit, we need to press F6 when the installer begins and install a AHCI driver. We'll need to attach [xp-satadrivers-ich9-flp.img](disk-images/xp-satadrivers-ich9-flp.img) as a floppy for the installer to see it. To do this, upload the img to proxmox, and add this line to the vm's conf
 ```
@@ -194,13 +214,21 @@ Great resources:
 - https://forum.mattkc.com/viewtopic.php?t=206
 
 ## Windows Vista
-
+### Machine Type
 Can run perfectly with q35 latest, no additional AHCI drivers required.
-Virtual hard drive should be SATA. We can enable Discard and SSD emulation and possibly use SSD Tweaker Pro to run Trim.
 
+### Virtual hard drive
+Since the Windows XP & Vista installer will not know how to deal with modern hard drives, we first should create & format our VM drive on a Windows 10/11 VM with MBR, NTFS. Then reassign the drive to the Win XP/Vista VM and proceed with installation. 
+
+For the installation, virtual hard disk must be either IDE or SATA. To prepare for VirtIO drivers installation, add a dummy 1GB virtual hard disk and select the VirtIO protocol. After the installation, Windows will ask for drivers for an unknown SCSI controller, and we can find the drivers in the VirtIO ISO. 
+
+After successfully installing the VirtIO SCSI controller, we can stop the VM, detach our boot disk, reattach it using the VirtIO protocol, make sure Discard is checked, and the device is selected in Boot Order in the Options tab. Now we can remove the dummy 1GB VirtIO disk.
+
+### Network card
+VirtIO. After installation, Windows will ask for drivers for unknown Ethernet card, and we can find drivers in the VirtIO ISO. Alternatively, select Realtek 8139 since it will work under XP and Vista by default, no need for 3rd party drivers. 
+
+### Other notes
 ![Here is the config of my Vista VM](images/proxmox-vista-conf.jpg)
-
-Since the Windows Vista installer will not know how to deal with modern hard drives, we first should format our VM drive on a Windows 10/11 VM with MBR, NTFS. Then reassign the drive to the Win Vista VM and proceed with installation.
 
 If we run the VM with an emulated GPU such as by using the VMWare compatible display, Windows Vista might not load the drivers for our passed through GPU correctly, giving a code 12 error. In this case, we should try setting Display to None and ticking the Primary GPU checkbox for the GPU passthrough.
 
