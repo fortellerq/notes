@@ -194,9 +194,13 @@ Also note that it might be possible to forcefully insert a newer community compi
 ### Virtual hard drive
 Since the Windows XP & Vista installer will not know how to deal with modern hard drives, we first should create & format our VM drive on a Windows 10/11 VM with MBR, NTFS. Then reassign the drive to the Win XP/Vista VM and proceed with installation. 
 
-For the installation, virtual hard disk must be either IDE or SATA. We can enable Discard and SSD emulation and possibly use SSD Tweaker Pro to run Trim. For XP 64 bit, to prepare for VirtIO drivers installation, add a dummy 1GB virtual hard disk and select the VirtIO protocol. After the installation, Windows will ask for drivers for an unknown SCSI controller, and we can find the drivers in the VirtIO ISO. 
+For the installation, virtual hard disk must be either IDE or SATA (SATA is faster than IDE). We can enable Discard and SSD emulation and possibly use SSD Tweaker Pro to run Trim. 
 
-After successfully installing the VirtIO SCSI controller, we can stop the VM, detach our boot disk, reattach it using the VirtIO protocol, make sure Discard is checked, and the device is selected in Boot Order in the Options tab. Now we can remove the dummy 1GB VirtIO disk.
+For XP 64 bit, we have the option to use VirtIO for our storage device, but it will have to be after the initial Windows installation with IDE/SATA. To prepare for VirtIO drivers installation, add a dummy 1GB virtual hard disk and select the VirtIO protocol. After the installation, Windows will ask for drivers for an unknown SCSI controller, and we can find the drivers in the VirtIO ISO. 
+
+After successfully installing the VirtIO SCSI controller, we can stop the VM, detach our boot disk, reattach it using the VirtIO protocol, make sure Discard is checked for TRIM support, and the device is selected in Boot Order in the Options tab. Now we can remove the dummy 1GB VirtIO disk.
+
+On XP 32 bit, the VirtIO drivers for storage doesn't work for me, so I have to stick to SATA.
 
 ### Network card
 VirtIO. After installation, Windows will ask for drivers for unknown Ethernet card, and we can find drivers in the VirtIO ISO. Alternatively, select Realtek 8139 since it will work under XP and Vista by default, no need for 3rd party drivers. 
@@ -220,9 +224,9 @@ Can run perfectly with q35 latest, no additional AHCI drivers required.
 ### Virtual hard drive
 Since the Windows XP & Vista installer will not know how to deal with modern hard drives, we first should create & format our VM drive on a Windows 10/11 VM with MBR, NTFS. Then reassign the drive to the Win XP/Vista VM and proceed with installation. 
 
-For the installation, virtual hard disk must be either IDE or SATA. To prepare for VirtIO drivers installation, add a dummy 1GB virtual hard disk and select the VirtIO protocol. After the installation, Windows will ask for drivers for an unknown SCSI controller, and we can find the drivers in the VirtIO ISO. 
+For the installation, virtual hard disk must be either IDE or SATA (SATA is faster than IDE). To prepare for VirtIO drivers installation, add a dummy 1GB virtual hard disk and select the VirtIO protocol. After the installation, Windows will ask for drivers for an unknown SCSI controller, and we can find the drivers in the VirtIO ISO. 
 
-After successfully installing the VirtIO SCSI controller, we can stop the VM, detach our boot disk, reattach it using the VirtIO protocol, make sure Discard is checked, and the device is selected in Boot Order in the Options tab. Now we can remove the dummy 1GB VirtIO disk.
+After successfully installing the VirtIO SCSI controller, we can stop the VM, detach our boot disk, reattach it using the VirtIO protocol, make sure Discard is checked for TRIM support, and the device is selected in Boot Order in the Options tab. Now we can remove the dummy 1GB VirtIO disk.
 
 ### Network card
 VirtIO. After installation, Windows will ask for drivers for unknown Ethernet card, and we can find drivers in the VirtIO ISO. Alternatively, select Realtek 8139 since it will work under XP and Vista by default, no need for 3rd party drivers. 
