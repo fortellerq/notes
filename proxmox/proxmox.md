@@ -185,7 +185,7 @@ Go [here](ssd-protection-proxmox.md) to learn about how to protect your Proxmox 
 
 ## Windows XP
 ### Machine type
-q35-2.10. Any newer version of q35 will crash the XP installer by default. 
+q35-2.10. Any newer version of q35 will crash the XP installer with an error about the bios not being fully APCI compliant.
 
 If we go to the Options tab and turn off APCI, then newer versions of q35 will not crash the XP installer, but we'll have other problems with hardware drivers that make it not worth it. So we should stick to q35-2.10. Note that this will make XP 32 & 64 bit unable to shut down fully, and XP 32 bit shut down when trying to reboot.
 
