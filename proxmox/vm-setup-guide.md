@@ -90,3 +90,4 @@ This iso also contains 7z and NVidia drivers.
 Great resources:
 - https://www.vogons.org/viewtopic.php?t=94012
 - https://blog.stevesec.com/2024/05/03/installing-windows-98-on-a-proxmox-ve/
+- https://github.com/JHRobotics/patcher9x
