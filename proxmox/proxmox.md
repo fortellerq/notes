@@ -212,7 +212,9 @@ After successfully installing the VirtIO SCSI controller, we can stop the VM, de
 On XP 32 bit, the VirtIO drivers for storage doesn't work for me, so I have to stick to SATA.
 
 ### Network card
-VirtIO. After installation, Windows will ask for drivers for unknown Ethernet card, and we can find drivers in the VirtIO ISO. Alternatively, select Realtek 8139 since it will work under XP and Vista by default, no need for 3rd party drivers. 
+VirtIO. After installation, Windows will ask for drivers for unknown Ethernet card, and we can find drivers in the VirtIO ISO. This is the recommended option as it is the most performant.
+
+Alternatively, select Realtek 8139 since it will work under XP and Vista by default, no need for 3rd party drivers. Pick this if you don't care about performance.
 
 ### Other notes
 ![Here is the config of my XP VM](images/proxmox-xp-conf.jpg)
@@ -238,7 +240,9 @@ For the installation, virtual hard disk must be either IDE or SATA (SATA is fast
 After successfully installing the VirtIO SCSI controller, we can stop the VM, detach our boot disk, reattach it using the VirtIO protocol, make sure Discard is checked for TRIM support, and the device is selected in Boot Order in the Options tab. Now we can remove the dummy 1GB VirtIO disk.
 
 ### Network card
-VirtIO. After installation, Windows will ask for drivers for unknown Ethernet card, and we can find drivers in the VirtIO ISO. Alternatively, select Realtek 8139 since it will work under XP and Vista by default, no need for 3rd party drivers. 
+VirtIO. After installation, Windows will ask for drivers for unknown Ethernet card, and we can find drivers in the VirtIO ISO. This is the recommended option as it is the most performant.
+
+Alternatively, select Realtek 8139 since it will work under XP and Vista by default, no need for 3rd party drivers. Pick this if you don't care about performance.
 
 ### Other notes
 ![Here is the config of my Vista VM](images/proxmox-vista-conf.jpg)
