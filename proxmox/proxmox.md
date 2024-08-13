@@ -57,6 +57,8 @@ To get pass this issue, we need to put this to our vm arguments `-cpu host,kvm=o
 
 Professional Nvidia (i.e. Quadro) and AMD cards do not have this issue.
 
+The latest Nvidia consumer drivers on Windows 10 and up added "support" for virtualisation, so it's not an issue for that use case.
+
 #### Sound
 As for sound, for XP and up we can get by with the GPU's HDMI/DP Audio output or a USB DAC. There is a Sound Blaster XFi Go! USB that has hardware-accelerated EAX which looks interesting.
 For Windows 98, we most likely need a PCI slot on the motherboard or a PCIe to PCI bridge, to use a PCI sound card.
