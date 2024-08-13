@@ -65,7 +65,9 @@ Has to be IDE. There are no Win 9x VirtIO drivers. The SSD emulation and Discard
 Since the Windows 98 installer will not know how to properly format modern hard drives, we first should format our VM drive on a Windows 10/11 VM with MBR, FAT32. Then reassign the drive to the Win 98 VM and proceed with installation.
 
 ### Network card
-For networking, select Intel E1000. Drivers can be installed from the ISO in the next section
+For networking, select Intel E1000. Drivers can be installed from the PRO98_10.1.exe file in [Win98drivers.iso](disk-images/Win98drivers.iso). Go to device manager, install drivers, and browse to the PRO1000 folder.
+
+This iso also contains 7z and NVidia drivers.
 
 ### Other notes
 I have not been able to get GPU Passthrough to work for this.
@@ -82,10 +84,6 @@ args: -object 'input-linux,id=kbd1,evdev=/dev/input/by-path/YOURKEYBOARD,grab_al
 ```
 
 After installation, copy the Win98 folder of the Windows 98 CD to C: drive. We need to do this because the CD drive will disappear some time during the next step. Then go to Device Manager, select Plug and Play BIOS, update drivers, show all hardware, select PCI Bus. We'll need the Windows 98 CD for this part. After that, a few more devices will be recognised and installed. 
-
-For networking, use the PRO98_10.1.exe drivers from [Win98drivers.iso](disk-images/Win98drivers.iso).
-
-This iso also contains 7z and NVidia drivers.
 
 Great resources:
 - https://www.vogons.org/viewtopic.php?t=94012
