@@ -1,3 +1,5 @@
+[Back to Proxmox](README.md)
+
 # Mounting existing Proxmox disks to Storage
 This is for when you need to reinstall Proxmox, maybe your Proxmox boot disk is broken, or the installation got botched somehow. You need to mount your existing backup & VM disks to continue using Proxmox as normal, here's how.
 
