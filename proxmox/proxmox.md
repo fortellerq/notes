@@ -192,6 +192,43 @@ Perhaps getting this card to work under XP in Proxmox is a futile endeavour afte
 ### SSD Protection
 Go [here](ssd-protection-proxmox.md) to learn about how to protect your Proxmox installed SSD from frequent writes.
 
+## Cloud Backups
+I have created a fork of TheRealAlexV's proxmox-vzbackup-rclone [here](https://github.com/hoangbv15/proxmox-vzbackup-rclone).
+This script will do 2 things
+- Compress everything under /etc, /var/lib/pve-cluster and /root into a tar in a ramdisk, and upload it using rclone
+- Upload everything under your gzdump folder using rclone
+
+For this to work, first we need to setup rclone. First install rclone
+```
+apt-get update
+apt-get install rclone
+apt-get install git
+```
+Then follow this guide [here](https://rclone.org/pcloud/) to set it up with pCloud or whichever cloud backup provider you use (which is compatible with rclone).
+After that, simply git clone the script:
+```
+git clone https://github.com/hoangbv15/proxmox-vzbackup-rclone
+cd proxmox-vzbackup-rclone
+chmod +x vzbackup-rclone.sh
+```
+Edit the script to set the path to your dumps. It would be `/var/lib/vz/dump` by default if you just dump to the same disk as your Proxmox installation.
+A full backup upload can be manually started with the command
+```
+/root/proxmox-vzbackup-rclone/vzbackup-rclone.sh full-backup
+```
+However keep in mind that the process will take a **very** long time, and the vnc connection might time out. If it does, the session will close and the upload will stop. So it's best to use a cron task for this.
+
+To schedule this clone weekly, we could use vanilla cron, but that requires the computer to be on at a specific time. So we'll instead use `anacron`, which will allow us to run tasks on a non-absolute timing, best-effort basis.
+To install `anacron`:
+```
+apt install anacron
+```
+Then run `nano /etc/anacrontab`, read the examples and add a line to schedule our backup cloud upload. In my case, I want to run the upload weekly, so I added
+```
+7       10      rclone-backup   /root/proxmox-vzbackup-rclone/vzbackup-rclone.sh full-backup
+```
+The 10 here means the job will be delayed by 10 minutes after booting.
+
 ## Windows XP
 ### Machine type
 q35-2.10. Any newer version of q35 will crash the XP installer with an error about the bios not being fully APCI compliant.
@@ -284,41 +321,3 @@ This iso also contains 7z and NVidia drivers.
 Great resources:
 - https://www.vogons.org/viewtopic.php?t=94012
 - https://blog.stevesec.com/2024/05/03/installing-windows-98-on-a-proxmox-ve/
-
-## Cloud Backups
-
-I have created a fork of TheRealAlexV's proxmox-vzbackup-rclone [here](https://github.com/hoangbv15/proxmox-vzbackup-rclone).
-This script will do 2 things
-- Compress everything under /etc, /var/lib/pve-cluster and /root into a tar in a ramdisk, and upload it using rclone
-- Upload everything under your gzdump folder using rclone
-
-For this to work, first we need to setup rclone. First install rclone
-```
-apt-get update
-apt-get install rclone
-apt-get install git
-```
-Then follow this guide [here](https://rclone.org/pcloud/) to set it up with pCloud or whichever cloud backup provider you use (which is compatible with rclone).
-After that, simply git clone the script:
-```
-git clone https://github.com/hoangbv15/proxmox-vzbackup-rclone
-cd proxmox-vzbackup-rclone
-chmod +x vzbackup-rclone.sh
-```
-Edit the script to set the path to your dumps. It would be `/var/lib/vz/dump` by default if you just dump to the same disk as your Proxmox installation.
-A full backup upload can be manually started with the command
-```
-/root/proxmox-vzbackup-rclone/vzbackup-rclone.sh full-backup
-```
-However keep in mind that the process will take a **very** long time, and the vnc connection might time out. If it does, the session will close and the upload will stop. So it's best to use a cron task for this.
-
-To schedule this clone weekly, we could use vanilla cron, but that requires the computer to be on at a specific time. So we'll instead use `anacron`, which will allow us to run tasks on a non-absolute timing, best-effort basis.
-To install `anacron`:
-```
-apt install anacron
-```
-Then run `nano /etc/anacrontab`, read the examples and add a line to schedule our backup cloud upload. In my case, I want to run the upload weekly, so I added
-```
-7       10      rclone-backup   /root/proxmox-vzbackup-rclone/vzbackup-rclone.sh full-backup
-```
-The 10 here means the job will be delayed by 10 minutes after booting.
