@@ -1,4 +1,4 @@
-[Back to main page](README.md)
+[Back to main page](../README.md)
 
 # proxmox-notes
 This document holds all of my experience so far with Proxmox, with a focus on retro OSes. Windows 98, Windows XP, Windows Vista.
