@@ -123,7 +123,7 @@ GRUB_CMDLINE_LINUX_DEFAULT="quiet pcie_acs_override=downstream"
 ```
 This will enable a kernel patch which may make your IOMMU groupings more flexible, [at the cost of security](proxmox-acs-override-vulnerability.md).
 
-### GPU vbios dumping
+## GPU vbios dumping
 We can dump the GPU's vbios rom to supposedly preserve this ability to see the VM's boot sequence in case it breaks for whatever reason, but I have not confirmed whether this works. 
 In all the different guides online, we'll only find these steps:
 ```
@@ -164,14 +164,14 @@ Go to the GPU device, the line should start with `pci`. Add this to the comma-se
 
 The 3 backlashes are needed because for some reason, Proxmox tries to find the rom in the wrong location even if we put in the full path (in this case it is `/root/gpuroms/rtx3090.rom`), so we need to get back to the root for the path to work.
 
-### VirtIO drivers
+## VirtIO drivers
 https://pve.proxmox.com/wiki/Windows_VirtIO_Drivers
 
 This driver is a bit like VMWare tools, but mainly for insanely fast networking and disk IO within the VMs. The drivers should work for Windows XP and up. Grab the latest bleeding edge on that link, it's stable enough to be used for our use case.
 
 The Linux kernel supports VirtIO out of the box, so this separate driver ISO is only required for Windows.
 
-### Soundcard passthrough
+## Soundcard passthrough
 I have tried passthrough a Soundblaster XFi but that freezes the entire physical machine. It seems the reason is that the Proxmox host somehow gets a hold of the card, which would be weird, because Proxmox doesn't have any audio output.
 
 The freezing stops happening if I do this
@@ -188,9 +188,6 @@ Now, the XP VM will recognise the card and the drivers will install successfully
 However, the same card and drivers work fine on a real XP machine, not to mention it works on Vista and up under Proxmox.
 
 Perhaps getting this card to work under XP in Proxmox is a futile endeavour after all.
-
-### SSD Protection
-Go [here](ssd-protection-proxmox.md) to learn about how to protect your Proxmox installed SSD from frequent writes.
 
 ## Cloud Backups
 I have created a fork of TheRealAlexV's proxmox-vzbackup-rclone [here](https://github.com/hoangbv15/proxmox-vzbackup-rclone).
@@ -229,4 +226,5 @@ Then run `nano /etc/anacrontab`, read the examples and add a line to schedule ou
 ```
 The 10 here means the job will be delayed by 10 minutes after booting.
 
+## [SSD Protection](ssd-protection-proxmox.md)
 ## [VM Setup Guide](vm-setup-guide.md)
