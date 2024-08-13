@@ -55,6 +55,8 @@ Next, the GPU needs to support the OS. This means we need a GPU from the era tha
 For consumer Nvidia cards on Windows XP up to Windows 7, there is an issue with official drivers which disables itself when it detects that we are running in a VM. The affected drivers are roughly from versions 337.88, 340.52 and above.
 To get pass this issue, we need to put this to our vm arguments `-cpu host,kvm=off`. I've verified that this works for driver version 337.88 and 340.52. For newer drivers, we apparently need to disable some kvm optimisations, which will tank performance so I'm not very interested.
 
+**This means if we want to use a consumer Nvidia GPU for XP up to 7 in Proxmox and want good performance, we should stick with driver version 340.52 maximum.**
+
 Professional Nvidia (i.e. Quadro) and AMD cards do not have this issue.
 
 The latest Nvidia consumer drivers on Windows 10 and up added "support" for virtualisation, so it's not an issue for that use case.
