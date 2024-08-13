@@ -47,7 +47,7 @@ For the CPU, it is not as important as long as it is x86, as it can be virtualis
 
 My modern machine has decent IOMMU groupings but not great. It has 3 long PCIe slots, 2 of which are separately grouped, which means I can pass through 2 GPUs to 2 different VMs. It has 3 PCIe x1 slots, but 2 out of 3 are disabled if one of the long PCIe slots mentioned above is occupied. This means I can have 1 main GPU for modern games, 1 retro GPU for XP/Vista, and 1 PCIe x1 slot for a sound card or whichever PCIe device (Note that my Sound Blaster XFi doesn't work on XP VMs for some strange reason).
 
-#### GPU
+#### GPU (Read - Important for Nvidia)
 Next, the GPU needs to support the OS. This means we need a GPU from the era that has drivers for the specific OS we need. For example:
 - Nvidia FX 5500 for Windows 98
 - Nvidia GTX 750 Ti for Windows XP
