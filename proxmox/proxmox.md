@@ -185,9 +185,9 @@ The id above `1102:000b` is the hardware id of the soundcard. This will force Pr
 
 Now, the XP VM will recognise the card and the drivers will install successfully. However, there is no sound output. It seems there is an issue with the drivers of the XFi on XP. The sound card works fine on Vista with Windows default drivers. However, if I boot into XP with the drivers installed and the sound card attached, the card isn't released properly once the XP VM is shut down. If I boot into Vista again, it does not see the sound card, and only a reboot of the Proxmox host will fix it.
 
-However, the same drivers work fine on a real XP machine. 
+However, the same card and drivers work fine on a real XP machine, not to mention it works on Vista and up under Proxmox.
 
-Perhaps getting this card to work under XP is a futile endeavour after all.
+Perhaps getting this card to work under XP in Proxmox is a futile endeavour after all.
 
 ### SSD Protection
 Go [here](ssd-protection-proxmox.md) to learn about how to protect your Proxmox installed SSD from frequent writes.
