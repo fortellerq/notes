@@ -167,7 +167,7 @@ The 3 backlashes are needed because for some reason, Proxmox tries to find the r
 ### VirtIO drivers
 https://pve.proxmox.com/wiki/Windows_VirtIO_Drivers
 
-This driver is a bit like VMWare tools, but mainly for insanely fast networking and disk IO within the VMs. The drivers should work for Windows XP and up. 
+This driver is a bit like VMWare tools, but mainly for insanely fast networking and disk IO within the VMs. The drivers should work for Windows XP and up. Grab the latest bleeding edge on that link, it's stable enough to be used for our use case.
 
 The Linux kernel supports VirtIO out of the box, so this separate driver ISO is only required for Windows.
 
