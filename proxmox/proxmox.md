@@ -218,7 +218,7 @@ Great resources:
 - https://forum.mattkc.com/viewtopic.php?t=206
 
 ## Windows Vista
-### Machine Type
+### Machine type
 Can run perfectly with q35 latest, no additional AHCI drivers required.
 
 ### Virtual hard drive
@@ -237,10 +237,20 @@ VirtIO. After installation, Windows will ask for drivers for unknown Ethernet ca
 If we run the VM with an emulated GPU such as by using the VMWare compatible display, Windows Vista might not load the drivers for our passed through GPU correctly, giving a code 12 error. In this case, we should try setting Display to None and ticking the Primary GPU checkbox for the GPU passthrough.
 
 ## Windows 98
+### Machine type
+Can run with the latest i440 machine type (9.0 at this time), but according to [this Vogons post](https://www.vogons.org/viewtopic.php?t=94012), we can get SB16 emulation if we pick 2.11. However picking 2.11 will make the machine unable to shut down fully. 
 
-Can run with the latest i440 machine type (9.0 at this time), but according to [this Vogons post](https://www.vogons.org/viewtopic.php?t=94012), we can get SB16 emulation if we pick 2.11. However picking 2.11 will make the machine unable to shut down fully. For networking, select Intel E1000.
+### Virtual hard drive
+Has to be IDE. There are no Win 9x VirtIO drivers. The SSD emulation and Discard checkboxes don't matter because there is no way to do TRIM on Win 9x.
 
+Since the Windows 98 installer will not know how to deal with modern hard drives, we first should format our VM drive on a Windows 10/11 VM with MBR, FAT32. Then reassign the drive to the Win 98 VM and proceed with installation.
+
+### Network card
+For networking, select Intel E1000. Drivers can be installed from the ISO in the next section
+
+### Other notes
 I have not been able to get GPU Passthrough to work for this.
+I have also not been able to use USB mouse and keyboard, Windows will just crash with Windows Protection Error as soon as I move the mouse.
 
 To add PS/2 mouse & keyboard to the VM, find out the path of your PS/2 devices by
 ```
@@ -251,8 +261,6 @@ Then add it to the VM by editting its conf file and adding to args
 ```
 args: -object 'input-linux,id=kbd1,evdev=/dev/input/by-path/YOURKEYBOARD,grab_all=on,repeat=on'
 ```
-
-Since the Windows 98 installer will not know how to deal with modern hard drives, we first should format our VM drive on a Windows 10/11 VM with MBR, FAT32. Then reassign the drive to the Win 98 VM and proceed with installation.
 
 After installation, copy the Win98 folder of the Windows 98 CD to C: drive. We need to do this because the CD drive will disappear some time during the next step. Then go to Device Manager, select Plug and Play BIOS, update drivers, show all hardware, select PCI Bus. We'll need the Windows 98 CD for this part. After that, a few more devices will be recognised and installed. 
 
