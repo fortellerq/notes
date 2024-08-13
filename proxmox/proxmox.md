@@ -36,14 +36,18 @@ There is a big catch. Type 1 hypervisors such as Proxmox have a very steep learn
 
 ## Pre-requisites
 ### Hardware
+#### Motherboard & CPU
 For any of this to work well, your motherboard and CPU need to support hardware isolation which is called **IOMMU groupings**. I believe this technology is called VT-d in most motherboard BIOS. But just supporting and turning on VT-d is not enough. the motherboard's IOMMU groupings need to be separated enough. 
 
 In layman's terms, this means the motherboard can allow some important hardware components (such as each PCI/PCIe slot) to be individually isolated and passed through to a Proxmox virtual machine. Without proper IOMMU groupings, hardware passthrough might be extremely painful or even impossible.
 
 This is why if you want a machine to run Proxmox or any other type 1 hypervisor with hardware pass-through, you should build a machine around that requirement. I believe that server motherboards will more likely satisfy this requirement, consumer motherboards will likely be hit or miss.
 
+For the CPU, it is not as important as long as it is x86, as it can be virtualised or emulated by KVM/Proxmox with decent speeds. Since retro OSes don't consume much CPU cycles, we should get decent speeds regardless. Not sure how this would work on an ARM based system as I have not tried.
+
 My modern machine has decent IOMMU groupings but not great. It has 3 long PCIe slots, 2 of which are separately grouped, which means I can pass through 2 GPUs to 2 different VMs. It has 3 PCIe x1 slots, but 2 out of 3 are disabled if one of the long PCIe slots mentioned above is occupied. This means I can have 1 main GPU for modern games, 1 retro GPU for XP/Vista, and 1 PCIe x1 slot for a sound card or whichever PCIe device (Note that my Sound Blaster XFi doesn't work on XP VMs for some strange reason).
 
+#### GPU
 Next, the GPU needs to support the OS. This means we need a GPU from the era that has drivers for the specific OS we need. For example:
 - Nvidia FX 5500 for Windows 98
 - Nvidia GTX 750 Ti for Windows XP
@@ -53,9 +57,10 @@ To get pass this issue, we need to put this to our vm arguments `-cpu host,kvm=o
 
 Professional Nvidia (i.e. Quadro) and AMD cards do not have this issue.
 
-For the rest of the components such as CPU, motherboard, it is not as important as long as it is x86, as they can be virtualised or emulated by KVM/Proxmox with decent speeds. Since retro OSes don't consume much CPU cycles, we should get decent speeds regardless. Not sure how this would work on an ARM based system as I have not tried.
-
-As for sound, for XP and up we can get by with the GPU's HDMI/DP Audio output. I have not tried emulated sound hardware in Proxmox. 
+#### Sound
+As for sound, for XP and up we can get by with the GPU's HDMI/DP Audio output or a USB DAC. There is a Sound Blaster XFi Go! USB that has hardware-accelerated EAX which looks interesting.
+For Windows 98, we most likely need a PCI slot on the motherboard or a PCIe to PCI bridge, to use a PCI sound card.
+I have not tried emulated sound hardware in Proxmox, but looks like this option relies on [SPICE](https://pve.proxmox.com/wiki/SPICE), which is a set of remote tools and does not output sound directly on the host. 
 
 ### Setting up Proxmox
 #### Modern machine 
