@@ -227,4 +227,5 @@ Then run `nano /etc/anacrontab`, read the examples and add a line to schedule ou
 The 10 here means the job will be delayed by 10 minutes after booting.
 
 ## [SSD Protection](ssd-protection-proxmox.md)
+## [Mount existing disks from previous Proxmox installation](mount-existing-disks-to-storage.md)
 ## [VM Setup Guide](vm-setup-guide.md)
