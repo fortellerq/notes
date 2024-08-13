@@ -103,7 +103,7 @@ nano /etc/modprobe.d/kvm.conf
 options kvm ignore_msrs=Y report_ignored_msrs=0
 ```
 
-Another thing we should do is set up our BIOS so that the IGPU is used to boot the computer and run Proxmox. That way all of our discreet GPUs will be able to see the VM's boot sequence and we won't get the above issue. Otherwise, we may get a black screen until the OS inside the VM loads the graphics driver.
+Another thing we should do is set up our BIOS so that the IGPU is used to boot the computer and run Proxmox. That way all of our discreet GPUs will be able to see the VM's boot sequence and we won't get the above issue. Otherwise, we may get a black screen until the guest OS inside the VM loads the graphics driver.
 
 Apparently, if the GPU is used to boot Proxmox, its vbios is touched somehow which prevents the card from showing VM boot screen.
 
