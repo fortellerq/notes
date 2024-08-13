@@ -1,3 +1,5 @@
+[Back to Proxmox](README.md)
+
 ## Windows XP
 ### Machine type
 q35-2.10. Any newer version of q35 will crash the XP installer with an error about the bios not being fully APCI compliant.
