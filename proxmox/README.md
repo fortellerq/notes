@@ -68,7 +68,14 @@ I have not tried emulated sound hardware in Proxmox, but looks like this option 
 
 ### Setting up Proxmox
 #### Modern machine 
-Firstly, do NOT follow the GPU passthrough guides out there blindly. For example, what I found is that adding boot flags to the grub entry did nothing for me, and GPU passthrough works without them. My hypothesis is that the latest versions of Proxmox already have built-in fixes for most PCI passthrough issues, and the guides are outdated. In the end, what matters is whether your motherboard and CPU support hardware isolation which is called **IOMMU groupings**.
+For storage, here is my setup:
+- Boot drive: 256 GB Samsung 870 EVO SATA SSD running Proxmox
+- VM drive: 2TB Western Digital Black NVMe PCIe SSD
+- Backup drive: 2TB Seagate Baracuda 7200 rpm HDD
+
+I plan to add another 2TB HDD in the future for a mirror ZFS setup (similar to RAID) for backups.
+
+For GPU passthrough, do NOT follow the guides out there blindly. For example, what I found is that adding boot flags to the grub entry did nothing for me, and GPU passthrough works without them. My hypothesis is that the latest versions of Proxmox already have built-in fixes for most PCI passthrough issues, and the guides are outdated. In the end, what matters is whether your motherboard and CPU support hardware isolation which is called **IOMMU groupings**.
 
 Here's what I have done:
 - Enabling _VT-d / Intel Virtualisation Technology for Direct IO / IOMMU_ in the BIOS. They are different names for the same thing. 
