@@ -190,6 +190,11 @@ options vfio-pci ids=1102:000b
 ```
 The id above `1102:000b` is the hardware id of the soundcard. This will force Proxmox to not use this soundcard. This is like blacklisting drivers, but for specific device ids.
 
+To find out hardware ids, run
+```
+lspci -nn
+```
+
 Now, the XP VM will recognise the card and the drivers will install successfully. However, there is no sound output. It seems there is an issue with the drivers of the XFi on XP. The sound card works fine on Vista with Windows default drivers. However, if I boot into XP with the drivers installed and the sound card attached, the card isn't released properly once the XP VM is shut down. If I boot into Vista again, it does not see the sound card, and only a reboot of the Proxmox host will fix it.
 
 However, the same card and drivers work fine on a real XP machine, not to mention it works on Vista and up under Proxmox.
