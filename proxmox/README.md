@@ -89,7 +89,7 @@ vfio_iommu_type1
 vfio_pci
 vfio_virqfd
 ```
-- Blacklisting drivers in Proxmox (we may even not need to do this, I haven't tested)
+- Blacklisting kernel modules in Proxmox (we may even not need to do this, I haven't tested)
 ```
 nano /etc/modprobe.d/blacklist.conf
 ```
@@ -101,6 +101,23 @@ blacklist nvidia
 blacklist snd_hda_intel
 blacklist snd_hda_codec_hdmi
 blacklist i915
+```
+
+To find out which kernel modules are used for the hardware, run the below command and take note of the kernel modules
+```
+lspci -v
+```
+- If blacklisting the kernel modules don't work, we might need to blacklist the hardware ids directly.
+```
+nano /etc/modprobe.d/vfio.conf
+```
+```
+options vfio-pci ids=1102:000b
+```
+The id above `1102:000b` is the hardware id of my Soundblaster XFi. This will force Proxmox to not use this soundcard. This is like blacklisting kernel modules, but for specific device ids.
+To find out hardware ids, run
+```
+lspci -nn
 ```
 - Set 2 options in kvm.conf, not sure what they do (we may even not need to do this, I haven't tested)
 ```
