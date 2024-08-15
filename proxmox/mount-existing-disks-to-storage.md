@@ -21,3 +21,5 @@ To permanently mount them, we need to add an entry to `/etc/fstab`, using the di
 ```
 echo 'UUID=d8871cd7-11b1-4f75-8cb6-254a6120 /mnt/oldbackups    ext4    defaults 0   2' >> /etc/fstab
 ```
+
+If you want to transfer dumps from "local" to a new disk, they are stored in `/var/lib/vz/dump`
