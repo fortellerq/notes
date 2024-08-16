@@ -81,13 +81,11 @@ ls
 ```
 Then add it to the VM by editting its conf file and adding to args
 ```
-args: -object input-linux,id=kbd1,evdev=/dev/input/by-id/YOURKEYBOARD,grab_all=on,repeat=on \
--object input-linux,id=mouse1,evdev=/dev/input/by-id/YOURMOUSE
+args: -object input-linux,id=kbd1,evdev=/dev/input/by-id/YOURKEYBOARD,grab_all=on,repeat=on -object input-linux,id=mouse1,evdev=/dev/input/by-id/YOURMOUSE
 ```
 For example, here are mine:
 ```
--object input-linux,id=kbd1,evdev=/dev/input/by-id/usb-Keychron_Keychron_K1-event-kbd,grab_all=on,repeat=on \
--object input-linux,id=mouse1,evdev=/dev/input/by-id/usb-Razer_Razer_Viper_8KHz-event-mouse
+-object input-linux,id=kbd1,evdev=/dev/input/by-id/usb-Keychron_Keychron_K1-event-kbd,grab_all=on,repeat=on -object input-linux,id=mouse1,evdev=/dev/input/by-id/usb-Razer_Razer_Viper_8KHz-event-mouse
 ```
 To see the raw events on the host, to confirm that you are using the correct event:
 ```
