@@ -107,3 +107,4 @@ Great resources:
 - https://www.vogons.org/viewtopic.php?t=94012
 - https://blog.stevesec.com/2024/05/03/installing-windows-98-on-a-proxmox-ve/
 - https://github.com/JHRobotics/patcher9x
+- https://www.baeldung.com/linux/mouse-events-input-event-interface
