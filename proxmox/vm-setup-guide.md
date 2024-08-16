@@ -91,7 +91,7 @@ For example, here are mine:
 ```
 To see the raw events on the host, to confirm that you are using the correct event:
 ```
-cat /dev/input/by-id/YOURKEYBOARDORMOUSE | od -t x1 -w24
+cat /dev/input/by-id/usb-Razer_Razer_Viper_8KHz-event-mouse | od -t x1 -w24
 ```
 ```
 2e 16 e9 63 00 00 00 00 17 95 0a 00 00 00 00 00 02 00 00 00 fd ff ff ff
