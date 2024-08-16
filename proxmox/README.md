@@ -255,6 +255,35 @@ Then run `nano /etc/anacrontab`, read the examples and add a line to schedule ou
 ```
 The 10 here means the job will be delayed by 10 minutes after booting.
 
+## Mouse & Keyboard
+We have 2 options.
+- Passthrough the USB mouse & keyboard directly to the guest OS, and use a physical USB KVM to switch between OSes.
+- Passthrough the mouse & keyboard events from the Proxmox host to the guest OSes using emulated PS/2. This method has the benefit of being able to software switch between the guest OSes without needing a USB KVM.
+
+To add emulated PS/2 mouse & keyboard, which will use events from your USB mouse & keyboard connected to the host, find out the path of your USB devices by
+```
+cd /dev/input/by-id
+ls
+```
+Then add it to the VM by editting its conf file and adding to args
+```
+args: -object input-linux,id=kbd1,evdev=/dev/input/by-id/YOURKEYBOARD,grab_all=on,repeat=on -object input-linux,id=mouse1,evdev=/dev/input/by-id/YOURMOUSE
+```
+For example, here are mine:
+```
+-object input-linux,id=kbd1,evdev=/dev/input/by-id/usb-Keychron_Keychron_K1-event-kbd,grab_all=on,repeat=on -object input-linux,id=mouse1,evdev=/dev/input/by-id/usb-Razer_Razer_Viper_8KHz-event-mouse
+```
+To switch between the guest OSes, press both the Ctrl keys on the keyboard. Note that the mouse needs to be after the keyboard in the entry above, for the switch to also switch the mouse. Otherwise, the mouse will stay in the first guest OS.
+
+To see the raw events on the host, to confirm that you are using the correct event:
+```
+cat /dev/input/by-id/usb-Razer_Razer_Viper_8KHz-event-mouse | od -t x1 -w24
+```
+```
+2e 16 e9 63 00 00 00 00 17 95 0a 00 00 00 00 00 02 00 00 00 fd ff ff ff
+|          16 bytes long system time           |type |code |   value   |
+```
+
 ## [SSD Protection](ssd-protection-proxmox.md)
 ## [Mount existing disks from previous Proxmox installation](mount-existing-disks-to-storage.md)
 ## [VM Setup Guide](vm-setup-guide.md)
