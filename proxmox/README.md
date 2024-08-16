@@ -258,7 +258,7 @@ The 10 here means the job will be delayed by 10 minutes after booting.
 ## Mouse & Keyboard
 We have 2 options.
 - Passthrough the USB mouse & keyboard directly to the guest OS, and use a physical USB KVM to switch between OSes.
-- Passthrough the mouse & keyboard events from the Proxmox host to the guest OSes using emulated PS/2. This method has the benefit of being able to software switch between the guest OSes without needing a USB KVM.
+- Passthrough the mouse & keyboard events from the Proxmox host to the guest OSes using emulated PS/2. This method has the benefit of being able to software switch between the guest OSes without needing a USB KVM. The downside is that any software that relies on the USB connection won't work, for instance, Razer Synapse.
 
 To add emulated PS/2 mouse & keyboard, which will use events from your USB mouse & keyboard connected to the host, find out the path of your USB devices by
 ```
