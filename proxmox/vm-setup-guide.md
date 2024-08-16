@@ -72,10 +72,9 @@ For networking, select Intel E1000. Drivers can be installed from the PRO98_10.1
 This iso also contains 7z and NVidia drivers.
 
 ### Other notes
-I have not been able to get GPU Passthrough to work for this.
-I have also not been able to use USB mouse and keyboard, Windows will just crash with Windows Protection Error as soon as I move the mouse.
+According to the Vogons page, we need `-machine hpet=off` to ensure consistent performance for 16 and 32 bit OSes. HPET stands for High Precision Event Timer. Maybe this has something to do with the bugs that patcher9x is trying to fix?
 
-To add PS/2 mouse & keyboard to the VM, find out the path of your PS/2 devices by
+To add emulated PS/2 mouse & keyboard, which will use events from your USB mouse & keyboard connected to the host, find out the path of your USB devices by
 ```
 cd /dev/input/by-path
 ls
@@ -84,8 +83,15 @@ Then add it to the VM by editting its conf file and adding to args
 ```
 args: -object 'input-linux,id=kbd1,evdev=/dev/input/by-path/YOURKEYBOARD,grab_all=on,repeat=on'
 ```
+For example, here are mine:
+```
+-object input-linux,id=kbd1,evdev=/dev/input/by-id/usb-Keychron_Keychron_K1-event-kbd,grab_all=on,repeat=on -object input-linux,id=mouse1,evdev=/dev/input/by-id/usb-Razer_Razer_Viper_8KHz-event-mouse
+```
+I have not been able to directly pass through USB mouse and keyboard, Windows will just crash with Windows Protection Error as soon as I move the mouse.
 
 After installation, copy the Win98 folder of the Windows 98 CD to C: drive. We need to do this because the CD drive will disappear some time during the next step. Then go to Device Manager, select Plug and Play BIOS, update drivers, show all hardware, select PCI Bus. We'll need the Windows 98 CD for this part. After that, a few more devices will be recognised and installed. 
+
+For the GPU pass through to work properly, after installing the GPU drivers, we need to remove the emulated GPU in Device Manager so there won't be Input/Output range conflicts.
 
 Great resources:
 - https://www.vogons.org/viewtopic.php?t=94012
