@@ -72,7 +72,7 @@ For networking, select Intel E1000. Drivers can be installed from the PRO98_10.1
 This iso also contains 7z and NVidia drivers.
 
 ### Other notes
-According to the Vogons page, we need `-machine hpet=off` to ensure consistent performance for 16 and 32 bit OSes. HPET stands for High Precision Event Timer. Maybe this has something to do with the bugs that patcher9x is trying to fix?
+According to the Vogons page, we need `args: -machine hpet=off` to ensure consistent performance for 16 and 32 bit OSes. HPET stands for High Precision Event Timer. Maybe this has something to do with the bugs that patcher9x is trying to fix?
 
 To add emulated PS/2 mouse & keyboard, which will use events from your USB mouse & keyboard connected to the host, find out the path of your USB devices by
 ```
