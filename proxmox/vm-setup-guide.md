@@ -74,28 +74,7 @@ This iso also contains 7z and NVidia drivers.
 ### Other notes
 According to the Vogons page, we need `args: -machine hpet=off` to ensure consistent performance for 16 and 32 bit OSes. HPET stands for High Precision Event Timer. Maybe this has something to do with the bugs that patcher9x is trying to fix?
 
-To add emulated PS/2 mouse & keyboard, which will use events from your USB mouse & keyboard connected to the host, find out the path of your USB devices by
-```
-cd /dev/input/by-id
-ls
-```
-Then add it to the VM by editting its conf file and adding to args
-```
-args: -object input-linux,id=kbd1,evdev=/dev/input/by-id/YOURKEYBOARD,grab_all=on,repeat=on -object input-linux,id=mouse1,evdev=/dev/input/by-id/YOURMOUSE
-```
-For example, here are mine:
-```
--object input-linux,id=kbd1,evdev=/dev/input/by-id/usb-Keychron_Keychron_K1-event-kbd,grab_all=on,repeat=on -object input-linux,id=mouse1,evdev=/dev/input/by-id/usb-Razer_Razer_Viper_8KHz-event-mouse
-```
-To see the raw events on the host, to confirm that you are using the correct event:
-```
-cat /dev/input/by-id/usb-Razer_Razer_Viper_8KHz-event-mouse | od -t x1 -w24
-```
-```
-2e 16 e9 63 00 00 00 00 17 95 0a 00 00 00 00 00 02 00 00 00 fd ff ff ff
-|          16 bytes long system time           |type |code |   value   |
-```
-I have not been able to directly pass through USB mouse and keyboard, Windows will just crash with Windows Protection Error as soon as I move the mouse.
+I have not been able to directly pass through USB mouse and keyboard, Windows will just crash with Windows Protection Error as soon as I move the mouse. Passing through mouse & keyboard using the emulated PS/2 method works, but the mouse has a weird issue. Whenever I drag click or scroll, the cursor jumps to the top left of the screen. Very annoying. I don't know how to fix this yet.
 
 After installation, copy the Win98 folder of the Windows 98 CD to C: drive. We need to do this because the CD drive will disappear some time during the next step. Then go to Device Manager, select Plug and Play BIOS, update drivers, show all hardware, select PCI Bus. We'll need the Windows 98 CD for this part. After that, a few more devices will be recognised and installed. 
 
