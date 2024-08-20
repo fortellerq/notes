@@ -74,7 +74,7 @@ This iso also contains 7z and NVidia drivers.
 ### Other notes
 According to the Vogons page, we need `args: -machine hpet=off` to ensure consistent performance for 16 and 32 bit OSes. HPET stands for High Precision Event Timer. Maybe this has something to do with the bugs that patcher9x is trying to fix?
 
-I have not been able to directly pass through USB mouse and keyboard, Windows will just crash with Windows Protection Error as soon as I move the mouse. Passing through mouse & keyboard using the emulated PS/2 method works, but the mouse has a weird issue. Whenever I drag click or scroll, the cursor jumps to the top left of the screen. Very annoying. Turns out this is caused by the [virtual QEMU Tablet USB device](https://pve.proxmox.com/wiki/Manual:_qm.conf) injected into all VMs by default. Disabling this will fix the mouse. We can do this by simply adding this line to the vm conf file:
+I have not been able to directly pass through USB mouse and keyboard, Windows will just crash with Windows Protection Error as soon as I move the mouse. Passing through mouse & keyboard using the emulated PS/2 method works, but the mouse has a weird issue. Whenever I drag click or scroll, the cursor jumps to the top left of the screen. Very annoying. Turns out this is caused by the [virtual QEMU Tablet USB device](https://pve.proxmox.com/wiki/Manual:_qm.conf) injected into all VMs by default. Disabling this will fix the mouse. On the Proxmox dashboard, simply go to the Options tab of the VM, double click on Use tablet for pointer and select No. Alternatively, add this line to the vm conf file using `nano /etc/pve/qemu-server/[vmid].conf`
 ```
 tablet: 0
 ```
