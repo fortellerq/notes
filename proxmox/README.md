@@ -298,7 +298,9 @@ To add an emulated sound card to our VM using ALSA as the output, we need to mod
 ```
 A list of supported models by QEMU can be found [here](https://computernewb.com/wiki/QEMU/Devices/Sound_cards#QEMU_7_and_above:)
 
-You may notice Soundblaster 16 and Adlib are in the list, but I have not managed to make it work for my Windows 98 VM, the guest won't see the sound card for some reason. 
+You may notice Soundblaster 16 and Adlib are in the list, but I have not managed to make it work for my Windows 98 VM, the guest won't see the sound card for some reason. AC97 works, but with low volume even with the slider maxed. I am temporarily getting around the issue by using a physical USB sound card with a volume boost function.
+
+Note that for emulated sound cards that are not natively supported by the guest OS, you will need to install its driver. For instance, the emulated AC97 card is an Intel(r) 82801AA AC'97, which means the AC97 (Intel ICH) audio drivers for Windows 95 / 98 / NT 4.0 is required.
 
 ### Passthrough
 I have tried passthrough a Soundblaster XFi but that freezes the entire physical machine. It seems the reason is that the Proxmox host somehow gets a hold of the card, which would be weird, because Proxmox doesn't have any audio output.
