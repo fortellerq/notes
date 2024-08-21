@@ -11,6 +11,7 @@ Machine 1 - **Modern machine**
 - Asus Maximus Hero VIII motherboard
 - GPU1: RTX 3090
 - GPU2: AMD R5 340X/R7 250
+- GPU3: Geforce 6600
   
 Machine 2 - **Time machine**
 - CPU: i7 3770
@@ -275,6 +276,7 @@ blacklist snd_hda_intel
 blacklist snd_hda_codec_hdmi
 blacklist i915
 ```
+For some strange reason, if I don't blacklist i915, which is a kernel module for Intel graphics, my NVidia Geforce 6600 seems to be grabbed by Proxmox and stops working for passthrough. Strange.
 
 If there are more than 1, we can select the one we want to output by forcing PCM and CTL to output to the card id number.
 ```
