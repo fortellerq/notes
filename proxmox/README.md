@@ -61,11 +61,6 @@ Professional Nvidia (i.e. Quadro) and AMD cards do not have this issue.
 
 The latest Nvidia consumer drivers on Windows 10 and up added "support" for virtualisation, so it's not an issue for that use case.
 
-#### Sound
-As for sound, for XP and up we can get by with the GPU's HDMI/DP Audio output or a USB DAC. There is a Sound Blaster XFi Go! USB that has hardware-accelerated EAX which looks interesting.
-For Windows 98, we most likely need a PCI slot on the motherboard or a PCIe to PCI bridge, to use a PCI sound card.
-I have not tried emulated sound hardware in Proxmox, but looks like this option relies on [SPICE](https://pve.proxmox.com/wiki/SPICE), which is a set of remote tools and does not output sound directly on the host. 
-
 ### Setting up Proxmox
 #### Modern machine 
 For storage, here is my setup:
@@ -195,29 +190,6 @@ This driver is a bit like VMWare tools, but mainly for insanely fast networking 
 
 The Linux kernel supports VirtIO out of the box, so this separate driver ISO is only required for Windows.
 
-## Soundcard passthrough
-I have tried passthrough a Soundblaster XFi but that freezes the entire physical machine. It seems the reason is that the Proxmox host somehow gets a hold of the card, which would be weird, because Proxmox doesn't have any audio output.
-
-The freezing stops happening if I do this
-```
-nano /etc/modprobe.d/vfio.conf
-```
-```
-options vfio-pci ids=1102:000b
-```
-The id above `1102:000b` is the hardware id of the soundcard. This will force Proxmox to not use this soundcard. This is like blacklisting drivers, but for specific device ids.
-
-To find out hardware ids, run
-```
-lspci -nn
-```
-
-Now, the XP VM will recognise the card and the drivers will install successfully. However, there is no sound output. It seems there is an issue with the drivers of the XFi on XP. The sound card works fine on Vista with Windows default drivers. However, if I boot into XP with the drivers installed and the sound card attached, the card isn't released properly once the XP VM is shut down. If I boot into Vista again, it does not see the sound card, and only a reboot of the Proxmox host will fix it.
-
-However, the same card and drivers work fine on a real XP machine, not to mention it works on Vista and up under Proxmox.
-
-Perhaps getting this card to work under XP in Proxmox is a futile endeavour after all.
-
 ## Cloud Backups
 I have created a fork of TheRealAlexV's proxmox-vzbackup-rclone [here](https://github.com/hoangbv15/proxmox-vzbackup-rclone).
 This script will do 2 things
@@ -260,6 +232,7 @@ We have 2 options.
 - Passthrough the USB mouse & keyboard directly to the guest OS, and use a physical USB KVM to switch between OSes.
 - Passthrough the mouse & keyboard events from the Proxmox host to the guest OSes using emulated PS/2. This method has the benefit of being able to software switch between the guest OSes without needing a USB KVM. The downside is that any software that relies on the USB connection won't work, for instance, Razer Synapse.
 
+### Emulated
 To add emulated PS/2 mouse & keyboard, which will use events from your USB mouse & keyboard connected to the host, find out the path of your USB devices by
 ```
 cd /dev/input/by-id
@@ -283,6 +256,72 @@ cat /dev/input/by-id/usb-Razer_Razer_Viper_8KHz-event-mouse | od -t x1 -w24
 2e 16 e9 63 00 00 00 00 17 95 0a 00 00 00 00 00 02 00 00 00 fd ff ff ff
 |          16 bytes long system time           |type |code |   value   |
 ```
+
+## Soundcard passthrough
+There are 2 approaches to sound
+- Creating an emulated sound card on the VM, such as AC97, which will pipe the audio to the Proxmox host to be output via a physical sound card that the host uses. This uses the Linux kernel's ALSA audio driver. The benefit of this method is that there is no need for PCI/USB passthrough. The downside is that we cannot have fancy features such as EAX, if we have a capable Soundblaster card. Also, the volume is much softer for some reason.
+- Passing through a physical sound card to the guest VM. The upside is that it is possible to have special features such as EAX with a capable sound card. The downside is that it requires PCI/USB passthrough, which may or may not work. For instance, I could not get my Soundblaster XFi PCIe card to work under XP, despite that it works fine in a real XP machine.
+
+### Emulated
+First, there is no need to install ALSA as it is already baked in to the Linux kernel. We can list the sound cards and the card id number that are currently usable as sound output devices by the command
+```
+aplay -l
+```
+If there is only 1 device in the list and is the correct device that we want to use, there is no further work required for ALSA.
+
+If the card we want does not show up, then the device is most likely blacklisted, either by kernel module  or device id blacklisting (see GPU passthrough section). For example, the below in `/etc/modprobe.d/blacklist.conf` will blacklist the kernel modules required for Intel chipset onboard sound
+```
+blacklist snd_hda_intel
+blacklist snd_hda_codec_hdmi
+blacklist i915
+```
+
+If there are more than 1, we can select the one we want to output by forcing PCM and CTL to output to the card id number.
+```
+nano /etc/asound.conf
+```
+```
+pcm.!default {
+    type hw
+    card 0
+}
+
+ctl.!default {
+    type hw           
+    card 0
+}
+```
+
+To add an emulated sound card to our VM using ALSA as the output, we need to modify the VM's conf file and add this to the VM's args
+```
+-audio driver=alsa,model=ac97,id=audio0
+```
+A list of supported models by QEMU can be found [here](https://computernewb.com/wiki/QEMU/Devices/Sound_cards#QEMU_7_and_above:)
+
+You may notice Soundblaster 16 and Adlib are in the list, but I have not managed to make it work for my Windows 98 VM, the guest won't see the sound card for some reason. 
+
+### Passthrough
+I have tried passthrough a Soundblaster XFi but that freezes the entire physical machine. It seems the reason is that the Proxmox host somehow gets a hold of the card, which would be weird, because Proxmox doesn't have any audio output.
+
+The freezing stops happening if I do this
+```
+nano /etc/modprobe.d/vfio.conf
+```
+```
+options vfio-pci ids=1102:000b
+```
+The id above `1102:000b` is the hardware id of the soundcard. This will force Proxmox to not use this soundcard. This is like blacklisting drivers, but for specific device ids.
+
+To find out hardware ids, run
+```
+lspci -nn
+```
+
+Now, the XP VM will recognise the card and the drivers will install successfully. However, there is no sound output. It seems there is an issue with the drivers of the XFi on XP. The sound card works fine on Vista with Windows default drivers. However, if I boot into XP with the drivers installed and the sound card attached, the card isn't released properly once the XP VM is shut down. If I boot into Vista again, it does not see the sound card, and only a reboot of the Proxmox host will fix it.
+
+However, the same card and drivers work fine on a real XP machine, not to mention it works on Vista and up under Proxmox.
+
+Perhaps getting this card to work under XP in Proxmox is a futile endeavour after all.
 
 ## [SSD Protection](ssd-protection-proxmox.md)
 ## [Mount existing disks from previous Proxmox installation](mount-existing-disks-to-storage.md)
