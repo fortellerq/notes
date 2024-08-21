@@ -303,9 +303,9 @@ You may notice Soundblaster 16 and Adlib are in the list, but I have not managed
 Note that for emulated sound cards that are not natively supported by the guest OS, you will need to install its driver. For instance, the emulated AC97 card is an Intel(r) 82801AA AC'97, which requires this [driver](disk-images/AC97-WDM-Driver-for-Windows-98.iso).
 
 ### Passthrough
-I have tried passthrough a Soundblaster XFi but that freezes the entire physical machine. It seems the reason is that the Proxmox host somehow gets a hold of the card, which would be weird, because Proxmox doesn't have any audio output.
+I have tried passthrough a Soundblaster XFi but that freezes the entire physical machine. It seems the reason is that the Proxmox host's ALSA driver gets a hold of the card.
 
-The freezing stops happening if I do this
+The freezing stops happening if I blacklist it
 ```
 nano /etc/modprobe.d/vfio.conf
 ```
