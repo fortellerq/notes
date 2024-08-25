@@ -53,19 +53,19 @@ Next, the GPU needs to support the OS. This means we need a GPU from the era tha
 - Nvidia FX 5500 for Windows 98
 - Nvidia GTX 750 Ti for Windows XP
 
-Outdated section:
+The below section is outdated and no longer applies, but still included for completeness:
 ______________________________
 For consumer Nvidia cards on Windows XP up to Windows 7, there is an issue with official drivers which disables itself when it detects that we are running in a VM. The affected drivers are roughly from versions 337.88, 340.52 and above.
 To get pass this issue, we need to put this to our vm arguments `-cpu host,kvm=off`. I've verified that this works for driver version 337.88 and 340.52. For newer drivers, we apparently need to disable some kvm optimisations, which will tank performance so I'm not very interested.
 
-**This means if we want to use a consumer Nvidia GPU for XP up to 7 in Proxmox and want good performance, we should stick with driver version 340.52 maximum.**
+This means if we want to use a consumer Nvidia GPU for XP up to 7 in Proxmox and want good performance, we should stick with driver version 340.52 maximum.
 
 Professional Nvidia (i.e. Quadro) and AMD cards do not have this issue.
 
 The latest Nvidia consumer drivers on Windows 10 and up added "support" for virtualisation, so it's not an issue for that use case.
 ______________________________
 
-Update: I have later tested a GTX 750 Ti under XP 32 bit and Vista 64 bit with the latest drivers (368.81 for XP and 365.19 for Vista) and they both worked, without the `kvm=off` flag or having to do anything else. It seems the issue described above either does not exist anymore for the latest version of Proxmox.
+**Update: I have later tested a GTX 750 Ti under XP 32 bit and Vista 64 bit with the latest drivers (368.81 for XP and 365.19 for Vista) and they both worked, without the `kvm=off` flag or having to do anything else.** It seems the issue described above does not exist anymore for the latest version of Proxmox.
 
 What could have been the issue was that I was running the VMs with 
 - The virtual GPU added (by having the VMWare compatible display option on) in addition to GTX 750 Ti
