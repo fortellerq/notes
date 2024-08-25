@@ -67,6 +67,12 @@ ______________________________
 
 Update: I have later tested a GTX 750 Ti under XP 32 bit and Vista 64 bit with the latest drivers (368.81 for XP and 365.19 for Vista) and they both worked, without the `kvm=off` flag or having to do anything else. It seems the issue described above either does not exist anymore for the latest version of Proxmox.
 
+What could have been the issue was that I was running the VMs with 
+- The virtual GPU added (by having the VMWare compatible display option on) in addition to GTX 750 Ti
+- Did not have the Primary GPU option selected for the GTX 750 Ti
+- Had the wrong settings in /etc/modprobe.d/vfio.conf by blindly following guides. By having `disable-vga=1` at the end, the GTX 750 Ti do not output the boot sequence, therefore requiring the virtual GPU added to install and boot Windows.
+Perhaps some or all of the above messed up the drivers somehow.
+
 ### Setting up Proxmox
 #### Modern machine 
 For storage, here is my setup:
