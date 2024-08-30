@@ -194,7 +194,17 @@ nano /etc/pve/qemu-server/[vmid].conf
 Go to the GPU device, the line should start with `pci`. Add this to the comma-separated list
 `romfile=../../../root/gpuroms/rtx3090.rom`
 
-The 3 backlashes are needed because for some reason, Proxmox tries to find the rom in the wrong location even if we put in the full path (in this case it is `/root/gpuroms/rtx3090.rom`), so we need to get back to the root for the path to work.
+The 3 backlashes are needed because by default, Proxmox tries to find the rom in the default directory for roms, which is `/usr/share/kvm/`, even if we put in the full path (in this case it is `/root/gpuroms/rtx3090.rom`), so we need to get back to the root for the path to work.
+
+To avoid the above, we can move our gpu roms there. I'd like to move them under `/usr/share/kvm/gpuroms`, then create a symlink to the home directory for easy access later.
+```
+ln -s /usr/share/kvm/gpuroms ~/gpuroms
+```
+With this, from now on, we can simply put `romfile=gpuroms/rtx3090.rom` in our vm conf.
+
+**One big advantage of using the `romfile` parameter is that we can test updated bioses for our GPUs without having to flash it for real and risk permanently bricking it.**
+
+I find this very helpful when I found for certain old GPUs, a newer bios works well for Windows 98 while an older version works well for XP and up.
 
 ## VirtIO drivers
 https://pve.proxmox.com/wiki/Windows_VirtIO_Drivers
