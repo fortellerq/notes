@@ -1,3 +1,5 @@
+[Back to Proxmox](README.md)
+
 # Temperature Monitoring in Proxmox
 
 Since the motherboard is not directly exposed to the VMs, we can't monitor temperatures of the CPU and motherboard directly in the VM.
