@@ -350,6 +350,8 @@ However, the same card and drivers work fine on a real XP machine, not to mentio
 
 Perhaps getting this card to work under XP in Proxmox is a futile endeavour after all.
 
-## [SSD Protection](ssd-protection-proxmox.md)
-## [Mount existing disks from previous Proxmox installation](mount-existing-disks-to-storage.md)
-## [VM Setup Guide](vm-setup-guide.md)
+## Miscellaneous
+- [VM Setup Guide](vm-setup-guide.md)
+- [SSD Protection](ssd-protection-proxmox.md)
+- [Mount existing disks from previous Proxmox installation](mount-existing-disks-to-storage.md)
+- [Temperature monitoring](temperature-monitoring.md)
