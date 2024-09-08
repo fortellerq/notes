@@ -317,6 +317,12 @@ ctl.!default {
 ```
 Sometimes the card id can randomly change. To force a card id to follow a pattern, check out [this article](https://wiki.archlinux.org/title/Advanced_Linux_Sound_Architecture#Set_the_default_sound_card)
 
+To test that your sound card is working properly with Alsa, use
+```
+speaker-test -t wav -c 2
+```
+Where 2 is the number of speakers you have.
+
 To add an emulated sound card to our VM using ALSA as the output, we need to modify the VM's conf file and add this to the VM's args
 ```
 -audio driver=alsa,model=ac97,id=audio0
