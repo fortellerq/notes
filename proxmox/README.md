@@ -282,7 +282,7 @@ cat /dev/input/by-id/usb-Razer_Razer_Viper_8KHz-event-mouse | od -t x1 -w24
 
 ## Sound
 There are 2 approaches to sound
-- Creating an emulated sound card on the VM, such as AC97, which will pipe the audio to the Proxmox host to be output via a physical sound card that the host uses. This uses the Linux kernel's ALSA audio driver. The benefit of this method is that there is no need for PCI/USB passthrough. The downside is that we cannot have fancy features such as EAX, if we have a capable Soundblaster card. Also, the volume is much softer for some reason.
+- **This only works with machine type i440, not q35** Creating an emulated sound card on the VM, such as AC97, which will pipe the audio to the Proxmox host to be output via a physical sound card that the host uses. This uses the Linux kernel's ALSA audio driver. The benefit of this method is that there is no need for PCI/USB passthrough. The downside is that we cannot have fancy features such as EAX, if we have a capable Soundblaster card. Also, the volume is much softer for some reason.
 - Passing through a physical sound card to the guest VM. The upside is that it is possible to have special features such as EAX with a capable sound card. The downside is that it requires PCI/USB passthrough, which may or may not work. For instance, I could not get my Soundblaster XFi PCIe card to work under XP, despite that it works fine in a real XP machine.
 
 ### Emulated
