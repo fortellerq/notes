@@ -316,6 +316,15 @@ ctl.!default {
 }
 ```
 Sometimes the card id can randomly change. To force a card id to follow a pattern, check out [this article](https://wiki.archlinux.org/title/Advanced_Linux_Sound_Architecture#Set_the_default_sound_card)
+For archival sake I'll include the crucial info here. We can edit this file to specify which card id our audio devices will have
+```
+nano /etc/modprobe.d/alsa-base.conf
+```
+```
+options snd_usb_audio index=0
+options snd_hda_intel index=1
+```
+The above config will cause our USB DAC to have card id 0, which will be used by Alsa by default.
 
 To test that your sound card is working properly with Alsa, use
 ```
