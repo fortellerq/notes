@@ -333,6 +333,18 @@ You may notice Soundblaster 16 and Adlib are in the list, but I have not managed
 
 Note that for emulated sound cards that are not natively supported by the guest OS, you will need to install its driver. For instance, the emulated AC97 card is an Intel(r) 82801AA AC'97, which requires this [driver](disk-images/AC97-WDM-Driver-for-Windows-98.iso).
 
+It is recommended to install the package `alsa-utils` in order to adjust the volume of the output device from proxmox
+```
+apt install alsa-utils
+```
+Run this to adjust volumes
+```
+alsamixer
+```
+
+Useful links:
+- https://www.maketecheasier.com/alsa-utilities-manage-linux-audio-command-line/
+
 ### Passthrough
 I have tried passthrough a Soundblaster XFi but that freezes the entire physical machine. It seems the reason is that the Proxmox host's ALSA driver gets a hold of the card.
 
