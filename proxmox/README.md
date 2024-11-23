@@ -5,20 +5,33 @@ This document holds all of my experience so far with Proxmox, with a focus on re
 
 Proxmox version: 8.2
 
-Machine 1 - **Modern machine**
+<details>
+<summary>Previous machines</summary>
+
+-----------------------
+Previous Machine 1 - **Modern machine**
 - CPU: i7 6700K
 - iGPU: Intel HD 530
 - Asus Maximus Hero VIII motherboard
 - GPU1: RTX 3090
 - GPU2: AMD R5 340X/R7 250
 - GPU3: Geforce 6600
+------------------------
+</details>
+
+Current Machine 1 - **Modern machine**
+- CPU: Xeon E5 2679 V4
+- iGPU: None
+- Asus X99-E-10G WS motherboard
+- GPU1: RTX 3090
+- GPU2: GT 640
+- GPU3: Geforce 6600
   
-Machine 2 - **Time machine**
+Current Machine 2 - **Time machine**
 - CPU: i7 3770
 - iGPU: Intel HD 4000
 - Dell Optiplex 7010 MT motherboard
-- GPU1: AMD HD 6450
-- GPU2: Geforce FX 5500
+- GPU: GTX 750 Ti
 
 ## What is Proxmox
 Proxmox is a Linux-based Type 1 Hypervisor. Some other Type 1 Hypervisors are Hyper-V (only when running on Windows Server), Red Hat Enterprise Virtualisation (RHEV) and vSphere (EXSi).
@@ -42,11 +55,13 @@ For any of this to work well, your motherboard and CPU need to support hardware 
 
 In layman's terms, this means the motherboard can allow some important hardware components (such as each PCI/PCIe slot) to be individually isolated and passed through to a Proxmox virtual machine. Without proper IOMMU groupings, hardware passthrough might be extremely painful or even impossible.
 
-This is why if you want a machine to run Proxmox or any other type 1 hypervisor with hardware pass-through, you should build a machine around that requirement. I believe that server motherboards will more likely satisfy this requirement, consumer motherboards will likely be hit or miss.
+This is why if you want a machine to run Proxmox or any other type 1 hypervisor with hardware pass-through, you should build a machine around that requirement. I believe that server and workstation motherboards will more likely satisfy this requirement, consumer motherboards will likely be hit or miss.
 
 For the CPU, it is not as important as long as it is x86, as it can be virtualised or emulated by KVM/Proxmox with decent speeds. Since retro OSes don't consume much CPU cycles, we should get decent speeds regardless. Not sure how this would work on an ARM based system as I have not tried.
 
-My modern machine has decent IOMMU groupings but not great. It has 3 long PCIe slots, 2 of which are separately grouped, which means I can pass through 2 GPUs to 2 different VMs. It has 3 PCIe x1 slots, but 2 out of 3 are disabled if one of the long PCIe slots mentioned above is occupied. This means I can have 1 main GPU for modern games, 1 retro GPU for XP/Vista, and 1 PCIe x1 slot for a sound card or whichever PCIe device (Note that my Sound Blaster XFi doesn't work on XP VMs for some strange reason).
+My previous modern machine has decent IOMMU groupings but not great. It has 3 long PCIe slots, 2 of which are separately grouped, which means I can pass through 2 GPUs to 2 different VMs. It has 3 PCIe x1 slots, but 2 out of 3 are disabled if one of the long PCIe slots mentioned above is occupied. This means I can have 1 main GPU for modern games, 1 retro GPU for XP/Vista, and 1 PCIe x1 slot for a sound card or whichever PCIe device (Note that my Sound Blaster XFi doesn't work on XP VMs for some strange reason).
+
+I have upgraded to a workstation motherboard on the X99 platform, which was very expensive when it first came out but has since come down to a very reasonable price. It has 7 full-size PCIe x16 slots sharing 32 lanes to the CPU, and it supports PCIe bifurcation. Most importantly, it has superb IOMMU groupings, pretty much everything is in its own group. 
 
 #### GPU
 Next, the GPU needs to support the OS. This means we need a GPU from the era that has drivers for the specific OS we need. For example:
@@ -54,6 +69,9 @@ Next, the GPU needs to support the OS. This means we need a GPU from the era tha
 - Nvidia GTX 750 Ti for Windows XP
 
 The below section is outdated and no longer applies, but still included for completeness:
+<details>
+<summary>Outdated section</summary>
+
 ______________________________
 For consumer Nvidia cards on Windows XP up to Windows 7, there is an issue with official drivers which disables itself when it detects that we are running in a VM. The affected drivers are roughly from versions 337.88, 340.52 and above.
 To get pass this issue, we need to put this to our vm arguments `-cpu host,kvm=off`. I've verified that this works for driver version 337.88 and 340.52. For newer drivers, we apparently need to disable some kvm optimisations, which will tank performance so I'm not very interested.
@@ -64,8 +82,9 @@ Professional Nvidia (i.e. Quadro) and AMD cards do not have this issue.
 
 The latest Nvidia consumer drivers on Windows 10 and up added "support" for virtualisation, so it's not an issue for that use case.
 ______________________________
+</details>
 
-**Update: I have later tested a GTX 750 Ti under XP 32 bit and Vista 64 bit with the latest drivers (368.81 for XP and 365.19 for Vista) and they both worked, without the `kvm=off` flag or having to do anything else.** It seems the issue described above does not exist anymore for the latest version of Proxmox.
+**Update: I later tested a GTX 750 Ti under XP 32-bit and Vista 64-bit with the latest drivers (368.81 for XP and 365.19 for Vista) and they both worked, without the `kvm=off` flag or having to do anything else.** It seems the issue described above does not exist anymore for the latest version of Proxmox.
 
 What could have been the issue was that I was running the VMs with 
 - The virtual GPU added (by having the VMWare compatible display option on) in addition to GTX 750 Ti
