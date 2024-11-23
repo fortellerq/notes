@@ -5,7 +5,28 @@
 Since the motherboard is not directly exposed to the VMs, we can't monitor temperatures of the CPU and motherboard directly in the VM.
 However, we can do this on the Proxmox host.
 
-## Method 1: lm-sensors
+## s-tui (preferred way)
+My preferred way is to use a tool called [s-tui](https://github.com/amanusk/s-tui), which gives a nice graphical representation of the CPU speeds, temps and even power consumption, without the process view. 
+
+It can be installed via apt
+```
+apt-get install s-tui
+```
+And we can run it with
+```
+s-tui
+```
+I sometimes struggle to remember the command name, so I create an alias in ~/.bashrc file
+```
+alias cpu='s-tui'
+```
+So I can run the tool with just `cpu`
+
+Here's a preview of what it looks like
+
+![s-tui preview](https://github.com/amanusk/s-tui/blob/master/ScreenShots/s-tui-1.0.gif?raw=true)
+
+## lm-sensors
 First, install the lm-sensors package
 ```
 apt install lm-sensors
@@ -99,6 +120,7 @@ Here's an example output:
    2580 root        20   0 67.7G 32.8G 12160 S   0.0 51.1  0:00.04 │  ├─ /usr/bin/kvm -id 105 -n
 
 ```
+
 
 ## Good resources:
 - https://gist.github.com/tinwhisker/53d77c887535129021a1f58359930935
