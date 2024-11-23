@@ -2,11 +2,15 @@
 
 ## Windows XP
 ### Machine type
-q35-2.10. Any newer version of q35 will crash the XP installer with an error about the bios not being fully APCI compliant.
+Either i440 latest, or q35-2.10. Any newer version of q35 will crash the XP installer with an error about the bios not being fully APCI compliant.
 
 If we go to the Options tab and turn off APCI, then newer versions of q35 will not crash the XP installer, but we'll have other problems with hardware drivers that make it not worth it. So we should stick to q35-2.10. Note that this will make XP 32 & 64 bit unable to shut down fully, and XP 32 bit shut down when trying to reboot.
 
 Also note that it might be possible to forcefully insert a newer community compiled apci.sys driver for XP, but I haven't tested this. Losing the ability to shut down fully from inside the VM isn't big deal, we can always force stop the VM from the Proxmox dashboard.
+
+If we select i440 latest, we won't have any issues with APCI. The only potential issue is that the i440 machine type only has PCI passthrough. We can still passthrough PCIe devices, but they will appear as PCI to the VM. Note that I have tried this with my PCIe GPU (the GT 640), and I didn't see any performance hit, so this might be a non-issue.
+
+The other upside of using i440 is the ability to emulate an Intel AC97 sound card, which Windows XP supports out of the box.
 
 ### Virtual hard drive
 Since the Windows XP & Vista installer will not know how to properly format modern hard drives, we first should create & format our VM drive on a Windows 10/11 VM with MBR, NTFS. Then reassign the drive to the Win XP/Vista VM and proceed with installation. 
@@ -38,7 +42,7 @@ Great resources:
 
 ## Windows Vista
 ### Machine type
-Can run perfectly with q35 latest, no additional AHCI drivers required.
+Can run perfectly with i440 or q35 latest, no additional AHCI drivers required.
 
 ### Virtual hard drive
 Since the Windows XP & Vista installer will not know how to properly format modern hard drives, we first should create & format our VM drive on a Windows 10/11 VM with MBR, NTFS. Then reassign the drive to the Win XP/Vista VM and proceed with installation. 
