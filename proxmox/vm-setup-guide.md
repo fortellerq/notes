@@ -106,7 +106,30 @@ No matter if installing Windows 98 on actual retro hardware or in VM, I prefer t
    mkdir C:\W98SRC
    copy *.* C:\WIN98SRC
    ```
-7. To be continued...
+7. After copying process is complete, usually it just matter of navigating to C:\W98SRC and launching setup command:
+   ```
+   c:
+   cd w98src
+   setup
+   ```
+8. However, since we are using Proxmox on modern system, installation media needs to be patched. I also enforce installation with ACPI enabled, which allows for triggering shutdown/reboot from Proxmox. I have a iso file prepared with patcher9x floppy extracted and after completing step 6 I just switch the iso from Windows 98 installation media to patcher9x in Proxmox and launch it (following step assumes that step 7 was skipped):
+   ```
+   cd ..
+   patch9x
+   C:\W98SRC (to point to installation media we just copied)
+   <enter> (to select default option "4")
+   <enter>
+   Y <enter> (to confirm the patches)
+   <enter> (to exit)
+   ```
+9. This is good moment to create a snapshot in Proxmox, or to create full backup using some external tool like Clonezilla, since now we have a disk formatted and installation files prepared on this disk. I leave it up to you to decide about best way to store this backup.
+10. Now, finally, we can navigate to folder with the only difference being, that we need to provide additional parameter to setup command, to enforce ACPI:
+   ```
+   c:
+   cd w98src
+   setup /p j 
+   ```
+
 ### Other notes
 According to the Vogons page, we need `args: -machine hpet=off` to ensure consistent performance for 16 and 32 bit OSes. HPET stands for High Precision Event Timer. Maybe this has something to do with the bugs that patcher9x is trying to fix?
 
