@@ -3,35 +3,19 @@
 # proxmox-notes
 This document holds all of my experience so far with Proxmox, with a focus on retro OSes. Windows 98, Windows XP, Windows Vista.
 
-Proxmox version: 8.2
+Proxmox version: 8.3.2
 
-<details>
-<summary>Previous machines</summary>
-
------------------------
-Previous Machine 1 - **Modern machine**
-- CPU: i7 6700K
-- iGPU: Intel HD 530
-- Asus Maximus Hero VIII motherboard
-- GPU1: RTX 3090
-- GPU2: AMD R5 340X/R7 250
-- GPU3: Geforce 6600
-------------------------
-</details>
-
-Current Machine 1 - **Modern machine**
-- CPU: Xeon E5 2679 V4
-- iGPU: None
-- Asus X99-E-10G WS motherboard
-- GPU1: RTX 3090
-- GPU2: GT 640
-- GPU3: Geforce 6600
+Machine 1
+- CPU: i7 5775C
+- iGPU: Intel Iris Pro 6200
+- Gigabyte GA-H97N-WiFi
   
-Current Machine 2 - **Time machine**
-- CPU: i7 3770
-- iGPU: Intel HD 4000
-- Dell Optiplex 7010 MT motherboard
-- GPU: GTX 750 Ti
+Machine 2
+- CPU: Pentium G5420
+- iGPU: Intel HD 610
+- ASRock Z370 Pro4
+- GPU1: Radeon HD5450 1GB
+- GPU2: GeForce 7600GS
 
 ## What is Proxmox
 Proxmox is a Linux-based Type 1 Hypervisor. Some other Type 1 Hypervisors are Hyper-V (only when running on Windows Server), Red Hat Enterprise Virtualisation (RHEV) and vSphere (EXSi).
