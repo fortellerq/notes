@@ -75,6 +75,38 @@ For networking, select Intel E1000. Drivers can be installed from the PRO98_10.1
 
 This iso also contains 7z and NVidia drivers.
 
+### Installation
+No matter if installing Windows 98 on actual retro hardware or in VM, I prefer to copy CD contents to HDD and to install system from HDD instead of CD. That way, Windows 98 will store system files location and will not ask for CD when performing some configuration changes or installing new hardware. Step by step guide:
+1. Boot from CD, select to boot from CD-ROM and in next step, select to start the computer with CD-ROM support. This way you will end up with DOS prompt launched with access to CD contents. If you are starting on empty drive, you will need to prepare installation partition. There are better tools to do it, but Windows 98 has its own tools and there is certain retro vibe to using legacy fdisk and format commands.
+2. Navigate to CD-ROM drive letter. On single partition systems it's gonna be "D". Then enter W98 directory and launch fdisk.
+   ```
+   D:
+   cd WIN98
+   fdisk
+   ```
+3. The first thing fdisk asks when it detects drive larger than 512MB, is if we want to enable large drive support which basically means if we want to format it as FAT32 instead of FAT16. When using W98 under VM, I create single 8GB drive which I dedicate as OS drive and, optionally, I change it later after installation. So at this stage I just select default options to use entire drive as primary partition.
+   ```
+   <enter> (to confirm large drive support)
+   <enter> (to create DOS partition)
+   <enter> (to create primary partition)
+   <enter> (to use entire drive)
+   ...wait...
+   <enter> (to not use any drive label)
+   ```
+4. Reset the system (Proxmox note: shutdown / reboot commands won't work as there is no ACPI support in DOS, you need to select "Reset")
+5. After system boots repeat step 1. and then:
+   ```
+   D:
+   cd WIN98
+   format c:
+   <enter> (to confirm formatting)
+   ```
+6. Once format is finished, you are no longer required to reboot the system - you can already use C: drive. Start by creating new folder to store Windows 98 installation files and then copy all installation files there. It's convenient since you are already in D:\WIN98
+   ```
+   mkdir C:\W98SRC
+   copy *.* C:\WIN98SRC
+   ```
+7. To be continued...
 ### Other notes
 According to the Vogons page, we need `args: -machine hpet=off` to ensure consistent performance for 16 and 32 bit OSes. HPET stands for High Precision Event Timer. Maybe this has something to do with the bugs that patcher9x is trying to fix?
 
