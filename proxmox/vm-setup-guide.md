@@ -130,11 +130,29 @@ No matter if installing Windows 98 on actual retro hardware or in VM, I prefer t
    setup /p j 
    ```
 ### Post installation
-Installing the system like described above will leave you with semi-usable system under Proxmox. It will hang during shutdown/reboot with artifacts on the screen, and performance will leave a lot to be desired. Below I am going to document my struggle to make things working. Make as many snapshots as possible! Also, order does matter.
-1. On every system I usually start by installing chipset drivers, the same applied to Proxmox VM. I tried using infinst_enu_6.3.1.1004.exe, but it causes Windows Protection Error on next reboot. To make it work again, I had to reboot into fail-safe mode and reboot it from there. Seems like it clears the driver installation which was queued and was causing WPE, as on next normal reboot system installs various integrated components like USB, PCI, IDE, but using built-in drivers instead of Intel ones.
-2. Next thing I tried is to install unofficial polish Service Pack 2.1b. I am using polish version, cause that's my native language. Filename sesp21b-pl.exe. I uncheck every option apart from performance improvement, USB driver and all official + ASPI updates. It installed properly
-3. At this stage, system runs in 640x480x4b mode whereas before it was running in richer-color mode (probably 640x480x16b). Virtualized Cirrus 5446 doesn't yield exclamation mark and higher screen modes are possible, but I am not going to change it as running in 640x480x4b mode seems to resolve the issue with artifacts during shutdown/reboot. Possibly, integrated W98 driver for Cirrus 5446 isn't fully compatible with virtualized Cirrus 5446.
-4. At this stage, I attempted to enable DMA for integrated HDD to speedup drive operations despite chipset drivers missing. It does seem to work after reboot. That way, I was able to perform C: drive ScanDisk under Windows, which - thanks to DMA - is muuuuuch faster than the one performed during startup. And my system, after one of the crashes, developed a belief, that it has broken sectors on its drive.
+Installing the system like described above will leave you with semi-usable system under Proxmox. It will hang during shutdown/reboot with artifacts on the screen, and performance will leave a lot to be desired. Below I am going to document my struggle to make things working. Make as many snapshots as possible!
+* On every system I usually start by installing chipset drivers, the same applied to Proxmox VM. I tried using infinst_enu_6.3.1.1004.exe, but it causes Windows Protection Error on next reboot. To make it work again, I had to reboot into fail-safe mode and reboot it from there. Seems like it clears the driver installation which was queued and was causing WPE, as on next normal reboot system installs various integrated components like USB, PCI, IDE, but using built-in drivers instead of Intel ones.
+* Next thing I tried is to install unofficial polish Service Pack 2.1b. I am using polish version, cause that's my native language. Filename sesp21b-pl.exe. I uncheck every option apart from performance improvement, USB driver and all official + ASPI updates. It installed properly
+* At this stage, system runs in 640x480x4b mode whereas before it was running in richer-color mode (probably 640x480x16b). Virtualized Cirrus 5446 doesn't yield exclamation mark and higher screen modes are possible, but I am not going to change it as running in 640x480x4b mode seems to resolve the issue with artifacts during shutdown/reboot. Possibly, integrated W98 driver for Cirrus 5446 isn't fully compatible with virtualized Cirrus 5446.
+* At this stage, I attempted to enable DMA for integrated HDD to speedup drive operations despite chipset drivers missing. It does seem to work after reboot. That way, I was able to perform C: drive ScanDisk under Windows, which - thanks to DMA - is muuuuuch faster than the one performed during startup. And my system, after one of the crashes, developed a belief, that it has broken sectors on its drive.
+* I gave another thought to chipset drivers thing. They might be unnecessary, as Windows 98SE includes all the drivers needed for Intel 440FX to function properly.
+* Let's take a look into integrated Cirrus 5446 and its inability to work reliably with higher resolutions. CIRRUS.VXD driver integrated in my Windows 98SE install has version number 4.10.1633. It does seem to corelate with Windows numbering system, so I am unsure if that will be comparable with drivers found on the internet. The driver I found latest seems to be 1.14g. It is version 4.02.1250, but let's try...
+* Attempt to install this driver makes system freeze when desktop mouse cursor shows up.
+* After further reading, it seems that solution is to ditch emulated cirrus and switch to "Standard VGA" in Proxmox instead. Community developed driver exists: https://github.com/phkelley/boxv9x Performance in desktop seems ok, shutdown/reboot works flawlessly, by default it supports up to 1920x1200x32 resolution, but I stick with usual 1024x768x32.
+* I proceeded with installing E1000 network driver (driver version 8.6.17.0 from 2005) and 53C895A SCSI driver (version 4.10.2225 from 2000). Network seems to be working, SCSI controller seems to add single unformatted drive which seems correct. There are two devices listed in device manager: PCI Card and Unknown Device.
+* Attempt to launch aida64 which I usually use for identyfing devices under any version of Windows OS yields a BSOD when ran under QEMU (version 5.30 which I used on many Windows 98 systems just fine). Will need to find alternative.
+![In the meantime, here's atto disk benchmark under Windows 98](images/w98_ide.png)
+* At this stage I decided to switch from IDE to SCSI controller. To do that, turn off the VM, in Proxmx GUI detach HDD from VM, click edit and attach it again, but with SCSI controller selected. Well, benchmark numbers are plain ridiculous and may be even broken, but system seems to boot faster.
+![After switching to SCSI](images/w98_scsi.png)
+* Now it's time to make Windows 98 running on VM with more than 512MB of RAM in order to be able to launch different OSes on the same VM. Add HIMEMX.EXE file to C:\WINDOWS\COMMAND directory and then add following line at the beginning of C:\CONFIG.SYS file:
+```
+DEVICE=C:\WINDOWS\COMMAND\HIMEMX.EXE /MAX=256M
+```
+* Now I can go wild and assign even 16GB of RAM to Windows 98 VM and it will continue to run just fine. The only thing to rememver is that Safe-Mode will not work properly, as HIMEMX won't be loaded in Safe-Mode. There are workaround for this, but if Safe Mode will ever be needed, I can just lower the memory amount assigned to VM.
+* I was using VM with "host" CPU passthrough. Switching that to QEMU32 resolves the problem with bluescreens I was seeing when launching AIDA64 and CPU-Z! The default CPU option x86-64-v2-AES also works.
+* Using AIDA64 I was able to confirm, that remaining two unknown devices in Device Manager are balooning device and VM indentifier - both virtual QEMU devices which realistically doesn't really matter under Windows 98.
+
+With all of the steps above performed, I treat my setup as ready!
 
 ### Other notes
 According to the Vogons page, we need `args: -machine hpet=off` to ensure consistent performance for 16 and 32 bit OSes. HPET stands for High Precision Event Timer. Maybe this has something to do with the bugs that patcher9x is trying to fix?
@@ -143,8 +161,6 @@ I have not been able to directly pass through USB mouse and keyboard, Windows wi
 ```
 tablet: 0
 ```
-
-After installation, copy the Win98 folder of the Windows 98 CD to C: drive. We need to do this because the CD drive will disappear some time during the next step. Then go to Device Manager, select Plug and Play BIOS, update drivers, show all hardware, select PCI Bus. We'll need the Windows 98 CD for this part. After that, a few more devices will be recognised and installed. 
 
 For the GPU pass through to work properly, after installing the GPU drivers, we need to remove the emulated GPU in Device Manager so there won't be Input/Output range conflicts.
 
