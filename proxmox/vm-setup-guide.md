@@ -145,9 +145,9 @@ Installing the system like described above will leave you with semi-usable syste
 * At this stage I decided to switch from IDE to SCSI controller. To do that, turn off the VM, in Proxmx GUI detach HDD from VM, click edit and attach it again, but with SCSI controller selected. Well, benchmark numbers are plain ridiculous and may be even broken, but system seems to boot faster.
 ![After switching to SCSI](images/w98_scsi.png)
 * Now it's time to make Windows 98 running on VM with more than 512MB of RAM in order to be able to launch different OSes on the same VM. Add HIMEMX.EXE file to C:\WINDOWS\COMMAND directory and then add following line at the beginning of C:\CONFIG.SYS file:
-```
-DEVICE=C:\WINDOWS\COMMAND\HIMEMX.EXE /MAX=256M
-```
+   ```
+   DEVICE=C:\WINDOWS\COMMAND\HIMEMX.EXE /MAX=256M
+   ```
 * Now I can go wild and assign even 16GB of RAM to Windows 98 VM and it will continue to run just fine. The only thing to rememver is that Safe-Mode will not work properly, as HIMEMX won't be loaded in Safe-Mode. There are workaround for this, but if Safe Mode will ever be needed, I can just lower the memory amount assigned to VM.
 * I was using VM with "host" CPU passthrough. Switching that to QEMU32 resolves the problem with bluescreens I was seeing when launching AIDA64 and CPU-Z! The default CPU option x86-64-v2-AES also works.
 * Using AIDA64 I was able to confirm, that remaining two unknown devices in Device Manager are balooning device and VM indentifier - both virtual QEMU devices which realistically doesn't really matter under Windows 98.
