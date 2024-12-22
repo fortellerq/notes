@@ -149,7 +149,7 @@ Installing the system like described above will leave you with semi-usable syste
    DEVICE=C:\WINDOWS\COMMAND\HIMEMX.EXE /MAX=256M
    ```
 * Now I can go wild and assign even 16GB of RAM to Windows 98 VM and it will continue to run just fine. The only thing to rememver is that Safe-Mode will not work properly, as HIMEMX won't be loaded in Safe-Mode. There are workaround for this, but if Safe Mode will ever be needed, I can just lower the memory amount assigned to VM.
-* I was using VM with "host" CPU passthrough. Switching that to QEMU32 resolves the problem with bluescreens I was seeing when launching AIDA64 and CPU-Z! The default CPU option x86-64-v2-AES also works.
+* I was using VM with "host" CPU passthrough. Switching that to QEMU32 resolves the problem with bluescreens I was seeing when launching AIDA64 and CPU-Z! The default CPU option x86-64-v2-AES makes AIDA64 work, but CPU-Z BSODs again.
 * Using AIDA64 I was able to confirm, that remaining two unknown devices in Device Manager are balooning device and VM indentifier - both virtual QEMU devices which realistically doesn't really matter under Windows 98.
 
 With all of the steps above performed, I treat my setup as ready!
