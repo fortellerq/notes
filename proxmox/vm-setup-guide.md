@@ -123,12 +123,18 @@ No matter if installing Windows 98 on actual retro hardware or in VM, I prefer t
    <enter> (to exit)
    ```
 9. This is good moment to create a snapshot in Proxmox, or to create full backup using some external tool like Clonezilla, since now we have a disk formatted and installation files prepared on this disk. I leave it up to you to decide about best way to store this backup.
-10. Now, finally, we can navigate to folder with the only difference being, that we need to provide additional parameter to setup command, to enforce ACPI:
+10. Now, finally, we can navigate to folder with the only difference being, that we need to provide additional parameter to setup command, to enforce ACPI. Installing with ACPI enabled also fixes the issue, where it is required to manually install PCI bus in order to detect hardware.
    ```
    c:
    cd w98src
    setup /p j 
    ```
+### Post installation
+Installing the system like described above will leave you with semi-usable system under Proxmox. It will hang during shutdown/reboot with artifacts on the screen, and performance will leave a lot to be desired. Below I am going to document my struggle to make things working. Make as many snapshots as possible! Also, order does matter.
+1. On every system I usually start by installing chipset drivers, the same applied to Proxmox VM. I tried using infinst_enu_6.3.1.1004.exe, but it causes Windows Protection Error on next reboot. To make it work again, I had to reboot into fail-safe mode and reboot it from there. Seems like it clears the driver installation which was queued and was causing WPE, as on next normal reboot system installs various integrated components like USB, PCI, IDE, but using built-in drivers instead of Intel ones.
+2. Next thing I tried is to install unofficial polish Service Pack 2.1b. I am using polish version, cause that's my native language. Filename sesp21b-pl.exe. I uncheck every option apart from performance improvement, USB driver and all official + ASPI updates. It installed properly
+3. At this stage, system runs in 640x480x4b mode whereas before it was running in richer-color mode (probably 640x480x16b). Virtualized Cirrus 5446 doesn't yield exclamation mark and higher screen modes are possible, but I am not going to change it as running in 640x480x4b mode seems to resolve the issue with artifacts during shutdown/reboot. Possibly, integrated W98 driver for Cirrus 5446 isn't fully compatible with virtualized Cirrus 5446.
+4. At this stage, I attempted to enable DMA for integrated HDD to speedup drive operations despite chipset drivers missing. It does seem to work after reboot. That way, I was able to perform C: drive ScanDisk under Windows, which - thanks to DMA - is muuuuuch faster than the one performed during startup. And my system, after one of the crashes, developed a belief, that it has broken sectors on its drive.
 
 ### Other notes
 According to the Vogons page, we need `args: -machine hpet=off` to ensure consistent performance for 16 and 32 bit OSes. HPET stands for High Precision Event Timer. Maybe this has something to do with the bugs that patcher9x is trying to fix?
